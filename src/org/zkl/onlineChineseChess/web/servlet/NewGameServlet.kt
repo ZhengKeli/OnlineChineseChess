@@ -1,7 +1,7 @@
-package org.zkl.teach.onlineChineseChess.web.servlet
+package org.zkl.onlineChineseChess.web.servlet
 
-import org.zkl.teach.onlineChineseChess.web.Configuration
-import org.zkl.teach.onlineChineseChess.web.base.*
+import org.zkl.onlineChineseChess.web.Configuration
+import org.zkl.onlineChineseChess.web.base.*
 import org.zkl.tools.java.data.json.JSONObject
 import javax.servlet.annotation.WebServlet
 import javax.servlet.http.HttpServlet
@@ -61,10 +61,10 @@ class NewGameServlet: HttpServlet(){
 		val resp_oldGameName = "oldGameName"
 		val req_quitOldGame = "quitOldGame"
 		class MultiGameException(
-			val oldGame:Game,
+			val oldGame: Game,
 			message: String?="You've took part in an other game. " +
-				"Send request with argument \"$req_quitOldGame\" with value true to quit it."
-		) :WebException(message){
+				"Send request with argument \"${req_quitOldGame}\" with value true to quit it."
+		) : WebException(message){
 			override fun toResponseJSON(): JSONObject {
 				val respJSON = super.toResponseJSON()
 				respJSON.put(resp_oldGameId, oldGame.id)

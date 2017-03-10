@@ -1,12 +1,7 @@
-package org.zkl.teach.onlineChineseChess.chessBoard.instant;
+package org.zkl.onlineChineseChess.core;
 
 
 import org.jetbrains.annotations.NotNull;
-import org.zkl.teach.onlineChineseChess.chessBoard.abstracts.ActionResult;
-import org.zkl.teach.onlineChineseChess.chessBoard.abstracts.Chess;
-import org.zkl.teach.onlineChineseChess.chessBoard.abstracts.ChessPlayer;
-import org.zkl.teach.onlineChineseChess.chessBoard.abstracts.ChessType;
-import org.zkl.teach.onlineChineseChess.chessBoard.abstracts.Chessboard;
 
 /**
  * Created by dell1 on 2017/2/25.

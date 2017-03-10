@@ -1,8 +1,8 @@
-package org.zkl.teach.onlineChineseChess.web.servlet
+package org.zkl.onlineChineseChess.web.servlet
 
-import org.zkl.teach.onlineChineseChess.web.base.GameData
-import org.zkl.teach.onlineChineseChess.web.base.GameState
-import org.zkl.teach.onlineChineseChess.web.base.createToken
+import org.zkl.onlineChineseChess.web.base.GameData
+import org.zkl.onlineChineseChess.web.base.GameState
+import org.zkl.onlineChineseChess.web.base.createToken
 import org.zkl.tools.java.data.json.JSONArray
 import org.zkl.tools.java.data.json.JSONObject
 import javax.servlet.annotation.WebServlet

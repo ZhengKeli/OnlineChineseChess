@@ -1,6 +1,6 @@
-package org.zkl.teach.onlineChineseChess.web.servlet
+package org.zkl.onlineChineseChess.web.servlet
 
-import org.zkl.teach.onlineChineseChess.web.base.*
+import org.zkl.onlineChineseChess.web.base.*
 import org.zkl.tools.java.data.json.JSONObject
 import javax.servlet.annotation.WebServlet
 import javax.servlet.http.HttpServlet
@@ -13,7 +13,7 @@ class QuitGameServlet: HttpServlet(){
 	override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
 		serveWithCover(resp) {
 			val gameToken = readToken(req)
-			val game=GameData.getGameOrThrow(gameToken.gameId)
+			val game= GameData.getGameOrThrow(gameToken.gameId)
 			
 			val respJSON = JSONObject()
 			quitGame(game, gameToken)

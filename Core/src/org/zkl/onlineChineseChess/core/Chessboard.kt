@@ -1,4 +1,4 @@
-package org.zkl.teach.onlineChineseChess.chessBoard.abstracts
+package org.zkl.onlineChineseChess.core
 
 
 enum class ChessPlayer { red, black;
@@ -19,7 +19,7 @@ enum class ChessType{
 	/** 炮 */ pao
 }
 
-data class Chess(val player: ChessPlayer, val type:ChessType)
+data class Chess(val player: ChessPlayer, val type: ChessType)
 data class ActionResult
 @JvmOverloads constructor(val legal: Boolean=true,val won: Boolean=false)
 

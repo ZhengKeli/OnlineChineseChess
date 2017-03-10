@@ -1,8 +1,8 @@
-package org.zkl.teach.onlineChineseChess.web
+package org.zkl.onlineChineseChess.web
 
-import org.zkl.teach.onlineChineseChess.chessBoard.abstracts.ChessPlayer
-import org.zkl.teach.onlineChineseChess.chessBoard.abstracts.Chessboard
-import org.zkl.teach.onlineChineseChess.chessBoard.instant.YHChessboard
+import org.zkl.onlineChineseChess.core.ChessPlayer
+import org.zkl.onlineChineseChess.core.Chessboard
+import org.zkl.onlineChineseChess.core.YHChessboard
 
 object Configuration{
 	val hmacKey: ByteArray = "I'm HMAC key".toByteArray()

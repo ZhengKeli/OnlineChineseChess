@@ -1,10 +1,10 @@
-package org.zkl.teach.onlineChineseChess.web.servlet
+package org.zkl.onlineChineseChess.web.servlet
 
-import org.zkl.teach.onlineChineseChess.web.Configuration
-import org.zkl.teach.onlineChineseChess.web.base.GameData
-import org.zkl.teach.onlineChineseChess.web.base.GameState
-import org.zkl.teach.onlineChineseChess.web.base.IllegalGameStateException
-import org.zkl.teach.onlineChineseChess.web.base.createToken
+import org.zkl.onlineChineseChess.web.Configuration
+import org.zkl.onlineChineseChess.web.base.GameData
+import org.zkl.onlineChineseChess.web.base.GameState
+import org.zkl.onlineChineseChess.web.base.IllegalGameStateException
+import org.zkl.onlineChineseChess.web.base.createToken
 import org.zkl.tools.java.data.json.JSONObject
 import javax.servlet.annotation.WebServlet
 import javax.servlet.http.HttpServlet
@@ -30,7 +30,7 @@ class ActionGameServlet : HttpServlet(){
 			val toRow=parameters.getIntOrThrow(req_toRow)
 			val toColumn=parameters.getIntOrThrow(req_toColumn)
 			
-			val respJSON=JSONObject()
+			val respJSON= JSONObject()
 			val game = GameData.getGameOrThrow(gameToken.gameId)
 			synchronized(game) {
 				if (game.state != GameState.playing)

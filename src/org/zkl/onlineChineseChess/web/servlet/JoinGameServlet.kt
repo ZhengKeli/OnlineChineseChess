@@ -1,10 +1,10 @@
-package org.zkl.teach.onlineChineseChess.web.servlet
+package org.zkl.onlineChineseChess.web.servlet
 
-import org.zkl.teach.onlineChineseChess.web.Configuration
-import org.zkl.teach.onlineChineseChess.web.base.GameData
-import org.zkl.teach.onlineChineseChess.web.base.GameState
-import org.zkl.teach.onlineChineseChess.web.base.IllegalGameStateException
-import org.zkl.teach.onlineChineseChess.web.base.createToken
+import org.zkl.onlineChineseChess.web.Configuration
+import org.zkl.onlineChineseChess.web.base.GameData
+import org.zkl.onlineChineseChess.web.base.GameState
+import org.zkl.onlineChineseChess.web.base.IllegalGameStateException
+import org.zkl.onlineChineseChess.web.base.createToken
 import org.zkl.tools.java.data.json.JSONObject
 import javax.servlet.annotation.WebServlet
 import javax.servlet.http.HttpServlet
@@ -21,7 +21,7 @@ class JoinGameServlet: HttpServlet(){
 			val respJSON = JSONObject()
 			
 			val gameId=parameters.getIntOrThrow(req_gameId)
-			val game=GameData.getGameOrThrow(gameId)
+			val game= GameData.getGameOrThrow(gameId)
 			synchronized(game) {
 				//检查是否已有 gameToken
 				var alreadyHasToken = false
@@ -66,7 +66,7 @@ class JoinGameServlet: HttpServlet(){
 						throw IllegalGameStateException("The game has been joined by someone else.")
 					
 					//开始 game
-					game.state=GameState.playing
+					game.state= GameState.playing
 					game.version++
 					
 					//返回 gameToken

@@ -1,7 +1,7 @@
-package org.zkl.teach.onlineChineseChess.web.base
+package org.zkl.onlineChineseChess.web.base
 
-import org.zkl.teach.onlineChineseChess.chessBoard.abstracts.ChessPlayer
-import org.zkl.teach.onlineChineseChess.web.Configuration
+import org.zkl.onlineChineseChess.core.ChessPlayer
+import org.zkl.onlineChineseChess.web.Configuration
 import java.security.MessageDigest
 import java.util.*
 import javax.crypto.Mac
@@ -16,7 +16,7 @@ data class GameToken(
 	val random: String = getRandom(),
 	val expired: Long = newExpired()
 ){
-	fun toTokenString() = Companion.toTokenString(this)
+	fun toTokenString() = toTokenString(this)
 	
 	companion object{
 		private fun toRawString(gameToken: GameToken): String {
@@ -124,7 +124,7 @@ fun messageDigest(byteArray: ByteArray): ByteArray = messageDigest.digest(byteAr
  * @param encryptKey  密钥
  * @return 签名后的消化了的数据
  */
-fun hmacSHA1Encrypt(byteArray: ByteArray, encryptKey: ByteArray=Configuration.hmacKey): ByteArray {
+fun hmacSHA1Encrypt(byteArray: ByteArray, encryptKey: ByteArray= Configuration.hmacKey): ByteArray {
 	//根据给定的字节数组构造一个密钥,第二参数指定一个密钥算法的名称
 	val secretKey = SecretKeySpec(encryptKey, "HmacSHA1")
 	//生成一个指定 Mac 算法 的 Mac 对象

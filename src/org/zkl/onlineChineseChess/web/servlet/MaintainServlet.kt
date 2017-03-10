@@ -1,7 +1,7 @@
-package org.zkl.teach.onlineChineseChess.web.servlet
+package org.zkl.onlineChineseChess.web.servlet
 
-import org.zkl.teach.onlineChineseChess.web.Configuration
-import org.zkl.teach.onlineChineseChess.web.base.GameData
+import org.zkl.onlineChineseChess.web.Configuration
+import org.zkl.onlineChineseChess.web.base.GameData
 import java.time.LocalDateTime
 import javax.servlet.annotation.WebServlet
 import javax.servlet.http.HttpServlet

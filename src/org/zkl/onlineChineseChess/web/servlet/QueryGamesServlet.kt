@@ -1,8 +1,8 @@
-package org.zkl.teach.onlineChineseChess.web.servlet
+package org.zkl.onlineChineseChess.web.servlet
 
-import org.zkl.teach.onlineChineseChess.web.base.Game
-import org.zkl.teach.onlineChineseChess.web.base.GameData
-import org.zkl.teach.onlineChineseChess.web.base.GameState
+import org.zkl.onlineChineseChess.web.base.Game
+import org.zkl.onlineChineseChess.web.base.GameData
+import org.zkl.onlineChineseChess.web.base.GameState
 import org.zkl.tools.java.data.json.JSONArray
 import org.zkl.tools.java.data.json.JSONObject
 import javax.servlet.annotation.WebServlet
@@ -37,7 +37,7 @@ class QueryGamesServlet: HttpServlet(){
 					if (returnGames.size >= limit) break
 				}
 			}
-			val gamesJSA=JSONArray().also { gamesJSA->
+			val gamesJSA= JSONArray().also { gamesJSA->
 				returnGames.forEach { game->
 					synchronized(game) {
 						val gameJSON = JSONObject()
@@ -49,7 +49,7 @@ class QueryGamesServlet: HttpServlet(){
 			}
 			respJSON.put(resp_games, gamesJSA)
 			
-			val token=readTokenOrNull(req)
+			val token= readTokenOrNull(req)
 			if (token != null) {
 				val game = GameData.getGameOrNull(token.gameId)
 				if (game != null) {

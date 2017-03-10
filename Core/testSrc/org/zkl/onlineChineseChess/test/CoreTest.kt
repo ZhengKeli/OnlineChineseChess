@@ -1,9 +1,9 @@
-package org.zkl.teach.onlineChineseChess.test
+package org.zkl.onlineChineseChess.test
 
-import org.zkl.teach.onlineChineseChess.chessBoard.abstracts.Chess
-import org.zkl.teach.onlineChineseChess.chessBoard.abstracts.ChessType
-import org.zkl.teach.onlineChineseChess.chessBoard.abstracts.Chessboard
-import org.zkl.teach.onlineChineseChess.chessBoard.instant.YHChessboard
+import org.zkl.onlineChineseChess.core.Chess
+import org.zkl.onlineChineseChess.core.ChessType
+import org.zkl.onlineChineseChess.core.Chessboard
+import org.zkl.onlineChineseChess.core.YHChessboard
 
 
 fun main(args:Array<String>){

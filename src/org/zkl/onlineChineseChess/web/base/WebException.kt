@@ -1,7 +1,7 @@
-package org.zkl.teach.onlineChineseChess.web.base
+package org.zkl.onlineChineseChess.web.base
 
-import org.zkl.teach.onlineChineseChess.web.servlet.resp_exception
-import org.zkl.teach.onlineChineseChess.web.servlet.resp_message
+import org.zkl.onlineChineseChess.web.servlet.resp_exception
+import org.zkl.onlineChineseChess.web.servlet.resp_message
 import org.zkl.tools.java.data.json.JSONObject
 
 

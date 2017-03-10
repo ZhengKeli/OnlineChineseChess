@@ -1,8 +1,8 @@
-package org.zkl.teach.onlineChineseChess.web.base
+package org.zkl.onlineChineseChess.web.base
 
-import org.zkl.teach.onlineChineseChess.chessBoard.abstracts.ChessPlayer
-import org.zkl.teach.onlineChineseChess.chessBoard.abstracts.Chessboard
-import org.zkl.teach.onlineChineseChess.web.Configuration
+import org.zkl.onlineChineseChess.core.ChessPlayer
+import org.zkl.onlineChineseChess.core.Chessboard
+import org.zkl.onlineChineseChess.web.Configuration
 import java.util.*
 
 
@@ -12,8 +12,8 @@ internal object GameData {
 	@Synchronized inline fun withGames(action:(MutableMap<Int, Game>)->Unit){
 		action(games)
 	}
-	@Synchronized fun getGameOrNull(id:Int):Game? = games[id]
-	@Synchronized fun getGameOrThrow(id:Int):Game = games[id] ?: throw GameNotFoundException(id)
+	@Synchronized fun getGameOrNull(id:Int): Game? = games[id]
+	@Synchronized fun getGameOrThrow(id:Int): Game = games[id] ?: throw GameNotFoundException(id)
 	@Synchronized fun newGame(chessboard: Chessboard = Configuration.NEW_CHESSBOARD()): Game {
 		nextId++
 		val game = Game(nextId, chessboard)
@@ -30,7 +30,7 @@ class GameNotFoundException(id: Int, message: String = "The game of id $id was n
 
 enum class GameState{ infant,playing,finished }
 class IllegalGameStateException(message: String?="The game state is unexrpected!") : WebException(message)
-class Game internal constructor(val id: Int,val chessboard: Chessboard,var name:String="game$id"){
+class Game internal constructor(val id: Int, val chessboard: Chessboard, var name:String="game$id"){
 	var version:Long =0
 	
 	val expired: Long get() = Math.max(redExpired, blackExpired)

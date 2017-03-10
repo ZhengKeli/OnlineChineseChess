@@ -1,8 +1,8 @@
-package org.zkl.teach.onlineChineseChess.web.servlet
+package org.zkl.onlineChineseChess.web.servlet
 
-import org.zkl.teach.onlineChineseChess.web.base.GameToken
-import org.zkl.teach.onlineChineseChess.web.base.InternalException
-import org.zkl.teach.onlineChineseChess.web.base.WebException
+import org.zkl.onlineChineseChess.web.base.GameToken
+import org.zkl.onlineChineseChess.web.base.InternalException
+import org.zkl.onlineChineseChess.web.base.WebException
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse
 val resp_exception = "exception"
 val resp_message = "message"
 fun serveWithCover(resp: HttpServletResponse, runnable: () -> String) {
-	resp.contentType = "text/html; charset=UTF-8";
+	resp.contentType = "text/html; charset=UTF-8"
 	var toWrite:String
 	try {
 		toWrite= runnable()
@@ -30,7 +30,7 @@ fun serveWithCover(resp: HttpServletResponse, runnable: () -> String) {
 val resp_gameToken = "gameToken"
 val req_gameToken = resp_gameToken
 val cookie_gameToken = resp_gameToken
-fun putTokenToCookie(resp: HttpServletResponse, tokenString: String,expired:Long) {
+fun putTokenToCookie(resp: HttpServletResponse, tokenString: String, expired:Long) {
 	val cookie = Cookie(cookie_gameToken, tokenString)
 	cookie.maxAge = ((expired-System.currentTimeMillis())/1000).toInt()
 	resp.addCookie(cookie)
@@ -63,7 +63,7 @@ class LackTokenException : APIIncompleteException("","You need a gameToken to en
 
 //api
 fun Map<String, Array<String>>.getStringOrThrow(key: String):String {
-	return this.getOrElse(key) { throw APIIncompleteException(key) }[0]
+	return this.getOrElse(key) { throw org.zkl.onlineChineseChess.web.servlet.APIIncompleteException(key) }[0]
 }
 fun Map<String, Array<String>>.getStringOrDefault(key: String, default: String): String {
 	return this[key]?.get(0) ?: default
@@ -92,12 +92,12 @@ fun Map<String, Array<String>>.getBooleanOfFalse(key: String):Boolean{
 
 
 open class APIException(message:String):WebException(message)
-class APIMalformedException(message: String = "the request is malformed!"):APIException(message)
+class APIMalformedException(message: String = "the request is malformed!"): APIException(message)
 open class APIIncompleteException(
-	itemName: String, message: String = "the request lacks an item $itemName!"):APIException(message)
+	itemName: String, message: String = "the request lacks an item $itemName!"): APIException(message)
 class APIIllegalException(
 	itemName: String="some argument", itemValue: String,
 	message: String = "the value \"$itemValue\" of $itemName is not expected!"
-):APIException(message)
+): APIException(message)
 
 
