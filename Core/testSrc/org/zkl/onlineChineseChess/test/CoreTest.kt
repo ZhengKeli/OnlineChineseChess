@@ -25,10 +25,11 @@ fun main(args:Array<String>){
 fun Chessboard.printSelf(){
 	val toPrint = StringBuilder()
 	toPrint.append("\n")
+	toPrint.append("\n   零 一 二 三 四 五 六 七 八\n")
 	for (row in 0 until rowCount) {
+		toPrint.append("$row ")
 		for (column in 0 until columnCount) {
 			toPrint.append(" "+(this[row, column]?.toChinese() ?: "十"))
-			
 		}
 		toPrint.append("\n")
 	}
