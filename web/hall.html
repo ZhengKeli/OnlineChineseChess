@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+	
+	<title>大厅</title>
+	
+	<link rel="stylesheet" type="text/css" href="./css/styles.css">
+	<style type="text/css">
+		
+		#et_newGameName{
+			color: #000000;
+			font-size: 18px;
+		}
+		
+	</style>
+</head>
+
+<body>
+<div id="div_mainBody" class="mainBody">
+	
+	<div id="div_head" class="head">
+		<div class="title"> 网络象棋 &nbsp &nbsp 大厅</div>
+		<div class="subTitle"> 选择一个棋局或者新建一个：</div>
+	</div>
+	
+	<hr size="5px" color="#FFFFFF"/>
+	
+	<div id="div_operation" class="operation">
+		
+		<div id="div_operationHead" style="margin: 30px 0 30px 0">
+			<div id="div_newGame" class="operationItem">
+				<input id="b_newGame" type="button" class="operationItemButton" value="新建棋局">
+				<label class="itemText">棋局名：
+					<input id="et_newGameName" type="text" name="name" value="">
+				</label>
+			</div>
+			<div id="div_oldGame" class="operationItem" style="display: none">
+				<input id="b_reenterGame" type="button" class="operationItemButton" value="回到棋局">
+				<label id="text_oldGame" class="itemText">您正在参与 棋局@0：哈啊哈哈</label>
+			</div>
+		</div>
+		
+		
+		<hr size="3px" color="#FFFFFF"/>
+		<div id="div_gamesList">
+			<div class="operationItem">
+				<input type="button" class="operationItemButton" value="进入棋局">
+				<label class="itemText">棋局：</label>
+				<hr size="1px" color="#FFFFFF"/>
+			</div>
+		</div>
+	</div>
+	
+</div>
+</body>
+
+<script type="text/javascript" src="./lib/jquery-3.1.1.min.js"></script>
+<script id="script_configuration" type="text/javascript">
+	//configurations
+    var randomGameNames = [
+        "啦啦啦啦啦", "巴啦啦新棋局", "象棋老司机的车",
+	    "不知道起什么名字好", "学神英豪在此", "学神小杭在此"];
+
+
+</script>
+<script id="script_ajax" type="text/javascript">
+
+    function newGameAjax(newGameName,quitOldGame,onSucceed,onFailed) {
+        $.get({
+            url: "/api/newGame.jsp",
+            data: {
+                name: newGameName,
+                quitOldGame: quitOldGame
+            },
+            success: function (result) {
+                var retJSON = JSON.parse(result);
+                if (!retJSON) {
+                    onFailed("");
+                } else if (retJSON["exception"]) {
+                    if (retJSON["exception"] == "MultiGameException") {
+                        var oldGameId = retJSON["oldGameId"];
+                        var oldGameName = retJSON["oldGameName"];
+                        var message = "您之前已经参与的 棋局@"+oldGameId+"："+oldGameName+" 还未结束，\n" +
+                            "您需要退出旧的棋局才能进入新棋局，\n" +
+                            "您确定要这样吗？";
+                        if (confirm(message)) {
+                            newGameAjax(newGameName, true, function (ret) {
+                                warnQuit();
+	                            onSucceed(ret)
+                            }, onFailed);
+                        }
+                    } else {
+                        onFailed(retJSON["exception"] + ":" + retJSON["message"]);
+                    }
+                } else {
+                    onSucceed(retJSON)
+                }
+            }
+        });
+    }
+
+    function queryGamesAjax(onSucceed,onFailed) {
+        $.get({
+            url: "/api/queryGames.jsp",
+            success: function (result) {
+                var retJSON = JSON.parse(result);
+                if (!retJSON) {
+                    onFailed("");
+                } else if (retJSON["exception"]) {
+                    onFailed(retJSON["exception"]+":"+retJSON["message"]);
+                } else{
+                    onSucceed(retJSON)
+                }
+            }
+        });
+    }
+
+    function joinGameAjax(gameId,quitOldGame,onSucceed,onFailed) {
+        $.get({
+            url: "/api/joinGame.jsp",
+            data: {
+                gameId: gameId,
+	            quitOldGame: quitOldGame
+            },
+            success: function (result) {
+                var retJSON = JSON.parse(result);
+                if (!retJSON) {
+                    onFailed("");
+                } else if (retJSON["exception"]) {
+                    if (retJSON["exception"]=="MultiGameException"){
+                        var oldGameId = retJSON["oldGameId"];
+                        var oldGameName = retJSON["oldGameName"];
+                        var message = "您之前已经参与的 棋局@"+oldGameId+"："+oldGameName+" 还未结束，\n" +
+                            "您需要退出旧的棋局才能进入新棋局，\n" +
+                            "您确定要这样吗？";
+                        if (confirm(message)){
+                            joinGameAjax(gameId, true, function (ret) {
+                                warnQuit();
+	                            onSucceed(ret)
+                            }, onFailed);
+                        }
+                    }else {
+                        onFailed(retJSON["exception"] + ":" + retJSON["message"]);
+                    }
+                } else {
+                    onSucceed(retJSON)
+                }
+            }
+        });
+    }
+
+</script>
+<script id="script_ui" type="text/javascript">
+    //new game
+    var et_newGameName = $("#et_newGameName")[0];
+    et_newGameName.value = randomGameNames[Math.floor(Math.random() * randomGameNames.length)];
+    $("#b_newGame")[0].onclick = function () {
+        var newGameName = et_newGameName.value;
+        if (newGameName == null || newGameName.length == 0) {
+            alert("请写上棋局名哦！");
+        } else {
+            newGameAjax(newGameName,false,function (ret) {
+	            jumpToGame()
+            },warnException);
+        }
+    };
+
+    //old game
+    var div_oldGame = $("#div_oldGame")[0];
+    var text_oldGame = $("#text_oldGame")[0];
+    var oldGameId = -1;
+    function checkOldGame(ret) {
+        if (ret["oldGameId"]) {
+            oldGameId = ret["oldGameId"];
+            text_oldGame.innerHTML="您正在参与 棋局@"+oldGameId+"："+ret["oldGameName"];
+            div_oldGame.style.display="inline"
+        }else{
+            div_oldGame.style.display="none"
+        }
+    }
+    $("#b_reenterGame")[0].onclick=function () {
+        if (oldGameId!=-1) jumpToGame()
+    };
+    
+
+    //join games
+    function joinGame(gameId) {
+        joinGameAjax(gameId,false, function (ret) {
+            if (ret["reenterWarn"]) warnReenter();
+            jumpToGame()
+        }, warnException);
+    }
+    
+    
+    //query games
+    var div_gameList = $("#div_gamesList")[0];
+    function showList(games) {
+        var toWriteHtml = "";
+        for (var key in games) {
+            var game = games[key];
+            if (game["id"] == oldGameId)continue;
+            var roomText = "棋局@" + game["id"] + " ： " + game["name"];
+            toWriteHtml += "" +
+                "<div class='operationItem'>" +
+                "<input type='button' " +
+                "class='operationItemButton' value='进入棋局' " +
+                'onclick="' + "joinGame(" + game["id"] + ");" + '">' +
+                "<label class='itemText'>" + roomText + "</label>" +
+                "</div>" +
+                "<hr size=\"1px\" color = \"#FFFFFF\" />";
+        }
+        if (toWriteHtml.length==0) {
+            if (oldGameId==-1) {
+                toWriteHtml = "暂时没有可以加入的棋局哦，新建一个吧！";
+            }else{
+                toWriteHtml = "暂时没有可以加入的棋局哦！";
+            }
+        }else{
+            toWriteHtml= "可以加入的棋局：<br/>"+toWriteHtml;
+        }
+        div_gameList.innerHTML = toWriteHtml;
+    }
+    div_gameList.innerHTML = "正在读取棋局数据……";
+    setInterval(function () {
+        queryGamesAjax(function (ret) {
+            checkOldGame(ret);
+            showList(ret["games"]);
+        },warnException);
+    }, 1000);
+    
+    
+    //jump
+    function jumpToGame() {
+        window.location.href = "game.html"
+    }
+
+    
+    //alert
+    function warnException(userMessage) { alert("似乎出了错！\n" + userMessage); }
+    function warnQuit() { alert("您退出了之前参与的棋局"); }
+    function warnReenter() { alert("您将回到之前参与的棋局"); }
+
+</script>
+</html>

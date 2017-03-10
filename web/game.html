@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+	<title>棋局</title>
+	
+	<link rel="stylesheet" type="text/css" href="./css/styles.css">
+	<style type="text/css">
+		.chessboardDiv {
+			text-align: center;
+		}
+		.chessboardCanvas {
+			width: 80vw;
+			height: 80vw;
+		}
+	</style>
+</head>
+<body>
+<div id="div_mainBody" class="mainBody">
+	<div id="div_head" class="head">
+		<div class="title"> 棋局</div>
+		<div id="text_subTitle" class="subTitle"> 正在读取棋局信息...</div>
+	</div>
+	
+	<hr size="5px" color="#FFFFFF"/>
+	
+	<div id="div_chessboard" class="chessboardDiv">
+		<div id="text_chessboard"> 正在读取棋局...</div>
+		<canvas id="canvas_chessboard" width="500" height="500" class="chessboardCanvas"></canvas>
+	</div>
+	
+
+</div>
+
+<script type="text/javascript" src="./lib/jquery-3.1.1.min.js"></script>
+<script id="script_ajax" type="text/javascript">
+
+	//ajax
+    var latestVersion = 0;
+    function checkRefreshAjax(onNeedRefresh, onFailed) {
+        $.get({
+            url: "api/refreshGame.jsp",
+            data: {latestVersion: latestVersion},
+            success: function (result) {
+                var retJSON = JSON.parse(result);
+                if (!retJSON || retJSON["exception"]) {
+                    onFailed(retJSON["exception"], retJSON["message"]);
+                } else if (retJSON["needRefresh"]) {
+                    var game = retJSON["game"];
+                    onNeedRefresh(game);
+                    latestVersion = game["version"];
+                }
+            }
+        });
+    }
+    function quitGameAjax(onSucceed,onFailed) {
+        $.post({
+            url: "api/quitGame.jsp",
+	        success:function (result) {
+                var retJSON = JSON.parse(result);
+                if (!retJSON || retJSON["exception"]) {
+                    onFailed(retJSON["exception"], retJSON["message"]);
+                } else if (retJSON["succeed"]) {
+                    onSucceed();
+                }
+            }
+        });
+    }
+    function actionGameAjax(fromRow, fromColumn, toRow, toColumn, onSucceed, onFailed) {
+        $.post({
+            url: "api/actionGame.jsp",
+	        data:{
+                fromRow:fromRow,
+		        fromColumn:fromColumn,
+		        toRow:toRow,
+		        toColumn:toColumn
+	        },
+	        success:function (result) {
+                var retJSON = JSON.parse(result);
+                if (!retJSON || retJSON["exception"]) {
+                    onFailed(retJSON["exception"], retJSON["message"]);
+                } else if (retJSON) {
+                    onSucceed(retJSON);
+                }
+            }
+        });
+    }
+
+</script>
+<script id="script_gameLogic" type="text/javascript">
+	
+    var game = {
+        id:-1,
+        name:"",
+        state: "infant",
+	    player:null,
+	    actionPlayer:null,
+        winner:null,
+        chessboard:[]
+    };
+    var rowCount=10;
+    var columnCount=9;
+    for (var row=0;row<rowCount;row++) {
+        var theRow = [];
+        for (var column=0;column<columnCount;column++) {
+            theRow.push(null);
+        }
+        game.chessboard.push(theRow);
+    }
+    function updateGameLogic(remoteGame) {
+        game.id = remoteGame.id;
+        game.name = remoteGame.name;
+        game.state = remoteGame.state;
+        game.player = remoteGame.player;
+        game.actionPlayer = remoteGame.actionPlayer;
+        game.winner = remoteGame.winner;
+
+        var remoteChessboard = remoteGame["chessboard"];
+        for (var index in remoteChessboard) {
+            var remoteChess = remoteChessboard[index];
+            game.chessboard[remoteChess["row"]][remoteChess["column"]] = {
+                type: remoteChess["type"],
+                player:remoteChess["player"]
+            };
+        }
+    }
+    
+</script>
+<script id="script_resources" type="text/javascript">
+    var resCount = 0;
+    var loadedCount = 0;
+    var allLoadedListeners = [];
+    function onOneLoaded() {
+        loadedCount++;
+        if (isAllLoaded()) {
+            onAllLoaded();
+        }
+    }
+    function onAllLoaded() {
+        for (var key in allLoadedListeners) {
+            if (typeof allLoadedListeners[key] == 'function'){
+                allLoadedListeners[key]();
+            }
+        }
+        allLoadedListeners = [];
+    }
+    function isAllLoaded() {
+        return loadedCount >= resCount;
+    }
+	function doWhenAllLoaded(action) {
+		if (isAllLoaded()) {
+            action();
+        }else{
+            allLoadedListeners.push(action);
+		}
+    }
+    
+    function loadImage(src) {
+        var img = new Image();
+        img.src = src;
+        resCount++;
+        img.onload = onOneLoaded();
+        return img
+    }
+    var img_chessboard = loadImage("res/chessboard.gif");
+    var img_selected = loadImage("res/selected.gif");
+    var imgMap_chess = {
+        red: {
+            shuai: loadImage("res/chess/red_shuai.gif"),
+            che: loadImage("res/chess/red_che.gif"),
+            ma: loadImage("res/chess/red_ma.gif"),
+            xiang: loadImage("res/chess/red_xiang.gif"),
+            shi: loadImage("res/chess/red_shi.gif"),
+            bing: loadImage("res/chess/red_bing.gif"),
+            pao: loadImage("res/chess/red_pao.gif")
+        },
+        black: {
+            shuai: loadImage("res/chess/black_shuai.gif"),
+            che: loadImage("res/chess/black_che.gif"),
+            ma: loadImage("res/chess/black_ma.gif"),
+            xiang: loadImage("res/chess/black_xiang.gif"),
+            shi: loadImage("res/chess/black_shi.gif"),
+            bing: loadImage("res/chess/black_bing.gif"),
+            pao: loadImage("res/chess/black_pao.gif")
+        }
+    };
+    
+</script>
+<script id="script_ui" type="text/javascript">
+	
+    //topBar
+    function updateTopBar() {
+        var text_subTitle = $("#text_subTitle")[0];
+        var titleContent = "棋局@" + game.id + "：" + game.name;
+
+        titleContent += "<br/>[";
+        var sub=["哦","哟","哈","咯","啦"];
+        function pick() {
+            return sub[Math.floor(Math.random() * sub.length)];
+        }
+
+        if (game.state == "infant") {
+            titleContent += "正在等待对手参加" + pick();
+        } else if (game.state == "playing") {
+            if (game.actionPlayer == game.player) {
+                titleContent += "到你了" + pick();
+            } else {
+                titleContent += "等对方下棋" + pick();
+            }
+        }
+        else if (game.state == "finished") {
+            if (game.winner == game.player) {
+                titleContent += "你赢了" + pick();
+            } else {
+                titleContent += "你输了" + pick();
+            }
+        }else{
+            warnExceptionAndQuit();
+        }
+
+        titleContent += "]";
+
+        text_subTitle.innerHTML = titleContent;
+    }
+    
+    //chessboard
+    var text_chessboard = $("#text_chessboard")[0];
+    var canvas_chessboard = $("#canvas_chessboard")[0];
+    function getLocatedRow(row) {
+        if (game.player == "red") {
+            return row;
+        } else {
+            return rowCount - 1 - row;
+        }
+    }
+
+    var drawBoard = {width: 500, height: 500, x: 0, y: 0};
+    var padding = {x: 0, y: 0};
+    var interval = {x: 0, y: 0};
+    function updateDrawArgs() {
+        var scale = Math.min(canvas_chessboard.width / img_chessboard.width, canvas_chessboard.height / img_chessboard.height);
+        drawBoard = {
+            width: img_chessboard.width * scale,
+            height: img_chessboard.height * scale,
+            x: (canvas_chessboard.width - img_chessboard.width * scale) / 2.0,
+            y: (canvas_chessboard.height - img_chessboard.height * scale) / 2.0
+        };
+        padding = {
+            x: drawBoard.width * 0.5 / 7.0,
+            y: drawBoard.height * 0.5 / 8.0
+        };
+        interval = {
+            x: (drawBoard.width - 2 * padding.x) / (columnCount-1),
+            y: (drawBoard.height - 2 * padding.y) / (rowCount-1)
+        };
+    }
+
+    function getExchangedRow(row) {
+        if (game.player == "red") {
+            return row;
+        } else {
+            return rowCount - 1 - row;
+        }
+    }
+    function updateCanvas() {
+        var graphics = canvas_chessboard.getContext("2d");
+        updateDrawArgs();
+
+        //画棋盘
+        graphics.drawImage(img_chessboard, drawBoard.x, drawBoard.y, drawBoard.width, drawBoard.height);
+
+        //画棋子
+        for (var row = 0; row < rowCount; row++) {
+            for (var column = 0; column < columnCount; column++) {
+                var chess = game.chessboard[row][column];
+                if (!chess) continue;
+                const img_chess = imgMap_chess[chess.player][chess.type];
+                graphics.drawImage(img_chess,
+                    drawBoard.x + padding.x + interval.x * column - img_chess.width / 2,
+                    drawBoard.y + padding.y + interval.y * getLocatedRow(row) - img_chess.height / 2);
+            }
+        }
+        
+        if (select) {
+	        graphics.drawImage(img_selected,
+                drawBoard.x + padding.x + interval.x * select.column - img_selected.width / 2,
+                drawBoard.y + padding.y + interval.y * getLocatedRow(select.row) - img_selected.height / 2);
+        }
+    }
+
+    var select=null;
+    var actionLock=true;
+    function getMouseRelative(element,pageX, pageY) {
+        var bbox = element.getBoundingClientRect();
+        return {
+            x: Math.round((pageX - bbox.left ) * (element.width / bbox.width)),
+            y: Math.round((pageY - bbox.top) * (element.height / bbox.height))
+        };
+    }
+    function onclickCanvas(event) {
+        if (game.state != "playing" || game.actionPlayer != game.player) return;
+	    
+        var mousePoint = getMouseRelative(canvas_chessboard, event.pageX, event.pageY);
+        var row = getExchangedRow(Math.floor((mousePoint.y - drawBoard.y - padding.y + interval.y / 2) / interval.y));
+        var column = Math.floor((mousePoint.x - drawBoard.x - padding.x + interval.x / 2) / interval.x);
+
+        function selectIt() {
+            select = {row: row, column: column};
+            updateCanvas();
+        }
+        function actionIt() {
+            if (!actionLock) return;
+            actionLock = false;
+            actionGameAjax(select.row, select.column, row, column, function (ret) {
+                if (ret["legal"]) {
+                    refreshGame();
+                    select = null;
+                } else {
+                    alert("你这么下不符合规则啊！");
+                }
+	            actionLock = true;
+            }, function () {
+                warnException();
+                actionLock = true;
+            });
+            select = null;
+        }
+        
+        if (game.player == game.actionPlayer) {
+            const chess = game.chessboard[row][column];
+            if (!select) {
+                //没选着东西
+                if (chess && chess.player == game.player) {
+                    selectIt()
+                }
+            } else {
+                //选着东西
+	            if (!chess) {
+	                //点着空地方
+                    actionIt();
+                }else{
+	                //点着东西
+		            if (chess.player!=game.player) {
+                        actionIt();
+                    }else{
+                        selectIt();
+		            }
+	            }
+            }
+        }
+    }
+    canvas_chessboard.onclick = onclickCanvas;
+
+
+    
+    
+    //jump
+	function jumpToHall() {
+        window.location.href = "hall.html";
+    }
+    
+    
+    //refreshing
+    function startRefreshing() {
+        setInterval(function () {
+            refreshGame();
+        },500);
+    }
+    function refreshGame() {
+        checkRefreshAjax(function (game) {
+            updateGameLogic(game);
+            updateTopBar();
+            updateCanvas();
+        },function () {
+            warnExceptionAndQuit();
+        })
+    }
+    
+    checkRefreshAjax(
+        function (game) {
+            updateGameLogic(game);
+            updateTopBar();
+            text_chessboard.innerHTML = "正在加载资源文件...";
+            doWhenAllLoaded(function () {
+                text_chessboard.style.display = "none";
+                updateCanvas();
+                startRefreshing();
+            });
+        },
+        warnVerifyFailedAndQuit
+    );
+	
+	
+	//warn
+    function warnException() {
+        alert("抱歉！似乎出问题了！\n也许可以再试一次看看？");
+    }
+    function warnExceptionAndQuit() {
+        alert("抱歉！似乎出问题了！\n还是先回大厅吧……");
+        jumpToHall();
+    }
+    function warnVerifyFailedAndQuit() {
+        alert("嗯？你是谁？\n你跟这盘棋无关啊哼，\n快回大厅去！");
+        jumpToHall();
+    }
+
+
+</script>
+
+</body>
+</html>
