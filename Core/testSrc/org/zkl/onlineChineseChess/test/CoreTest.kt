@@ -13,7 +13,7 @@ fun main(args:Array<String>){
 	//如下可以将棋盘输出到控制栏
 	chessboard.printSelf()
 	
-	val result=chessboard.action(1, 7, 7, 7)
+	val result=chessboard.action(6, 0, 5, 0)
 	println(result)
 	
 	chessboard.printSelf()

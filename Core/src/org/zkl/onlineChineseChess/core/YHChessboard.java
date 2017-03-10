@@ -125,10 +125,11 @@ public class YHChessboard implements Chessboard {
 								return new ActionResult(true, true);
 							}
 						}
-					} else
+					} else {
 						Map[fromColumn][fromRow] = null;
-					Map[toColumn][toRow] = firstChess;
-					return new ActionResult(true, false);
+						Map[toColumn][toRow] = firstChess;
+						return new ActionResult(true, false);
+					}
 				}
 				
 			}
