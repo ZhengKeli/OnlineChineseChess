@@ -93,92 +93,23 @@ public class YHChessboard implements Chessboard {
 			} else {
 				actionPlayer = ChessPlayer.red;
 			}
-			Chess firstChess = get(fromRow,
-				fromColumn);
-			for (int column = 0; column < 9; column++) {
-				for (int row = 0; row < 10; row++) {
-					if (Map[column][row] != null && Map[column][row].getPlayer() == get(fromRow, fromColumn).getPlayer()) {
-						if (get(fromRow, fromColumn).getPlayer() == ChessPlayer.red) {
-							int blackShuaix=0;
-							int blackShuaiy=0;
-							for(int m=0;m<=9;m++){
-								for(int n=0;n<=8;n++){
-									if(Map[n][m].getType()==ChessType.shuai&&Map[n][m].getPlayer()==ChessPlayer.black){
-										blackShuaix=n;
-										blackShuaiy=m;
-									}
-								}
-							}
-							if (IsAbleToPut(column, row,blackShuaix , blackShuaiy)) {
-								Map[fromColumn][fromRow] = null;
-								Map[toColumn][toRow] = firstChess;
-								return new ActionResult(true, false);
-							}
-						} else if (get(fromRow, fromColumn).getPlayer() == ChessPlayer.black) {
-							int redShuaix=0;
-							int redShuaiy=0;
-							for(int m=0;m<=9;m++){
-								for(int n=0;n<=8;n++){
-									if(Map[n][m]!=null&&Map[n][m].getType()==ChessType.shuai&&Map[n][m].getPlayer()==ChessPlayer.red){
-										redShuaix=n;
-										redShuaiy=m;
-									}
-								}
-							}
-							if (IsAbleToPut(column, row, redShuaix, redShuaiy)) {
-								Map[fromColumn][fromRow] = null;
-								Map[toColumn][toRow] = firstChess;
-								return new ActionResult(true, false);
-							}
-						}
-					} else if (Map[column][row] != null && Map[column][row].getPlayer() != get(fromRow, fromColumn).getPlayer()) {
-						if (get(fromRow, fromColumn).getPlayer() == ChessPlayer.black) {
-							int blackShuaix=0;
-							int blackShuaiy=0;
-							for(int m=0;m<=9;m++){
-								for(int n=0;n<=8;n++){
-									if(Map[n][m].getType()==ChessType.shuai&&Map[n][m].getPlayer()==ChessPlayer.black){
-										blackShuaix=n;
-										blackShuaiy=m;
-									}
-								}
-							}
-							if (IsAbleToPut(column, row, blackShuaix, blackShuaiy)) {
-								Map[fromColumn][fromRow] = null;
-								Map[toColumn][toRow] = firstChess;
-								return new ActionResult(true, true);
-							}
-						} else if (get(fromRow, fromColumn).getPlayer() == ChessPlayer.red) {
-							int redShuaix=0;
-							int redShuaiy=0;
-							for(int m=0;m<=9;m++){
-								for(int n=0;n<=8;n++){
-									if(Map[n][m].getType()==ChessType.shuai&&Map[n][m].getPlayer()==ChessPlayer.black){
-										redShuaix=n;
-										redShuaiy=m;
-									}
-								}
-							}
-							if (IsAbleToPut(column, row, redShuaix, redShuaiy)) {
-								Map[fromColumn][fromRow] = null;
-								Map[toColumn][toRow] = firstChess;
-								return new ActionResult(true, true);
-							}
-						}
-					} else {
-						Map[fromColumn][fromRow] = null;
-						Map[toColumn][toRow] = firstChess;
-						return new ActionResult(true, false);
-					}
-				}
-				
+			if(Map[toColumn][toRow].getType()==ChessType.shuai){
+				return new ActionResult(true,true);
 			}
+			else return new ActionResult(true,false);
+			
 		}
 		return new ActionResult(false, false);
 	}
 	
 	public boolean IsAbleToPut(int x1, int y1, int x, int y) {
 		ChessType oldChessType = Map[x1][y1].getType();
+		if(Map[x][y]!=null){
+			ChessType newChessType=Map[x][y].getType();
+			if(newChessType==oldChessType){
+				return false;
+			}
+		}
 		if (oldChessType == ChessType.shuai) {
 			if ((x - x1) * (y - y1) != 0) {
 				return false;
