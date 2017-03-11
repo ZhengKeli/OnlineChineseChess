@@ -279,7 +279,7 @@ public class YHChessboard implements Chessboard {
 					int t = y1;
 					y1 = y;
 					y = t;
-				} else for (int j = y1; j < y; j++) {
+				}  for (int j = y1+1; j < y; j++) {
 					if (Map[x][j] != null) {
 						c++;
 					}
