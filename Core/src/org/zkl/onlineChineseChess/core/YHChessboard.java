@@ -147,6 +147,19 @@ public class YHChessboard implements Chessboard {
 			} else if (x < 4 || x > 6 || (y > 3 && y < 8)) {
 				return false;
 			}
+			for(int row=0;row<=9;row++){
+				if(Map[x][row].getType()==ChessType.shuai){
+					int c=0;
+					for(int n=y+1;n<row;n++){
+						if(Map[x][n]!=null){
+							c++;
+						}
+					}
+					if(c==0){
+						return false;
+					}
+				}
+			}
 			return true;
 		} else if (oldChessType == ChessType.shi) {
 			if ((x - x1) * (y - y1) == 0) {
