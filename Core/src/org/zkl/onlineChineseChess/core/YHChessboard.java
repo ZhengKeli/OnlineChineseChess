@@ -159,7 +159,7 @@ public class YHChessboard implements Chessboard {
 				return false;
 			} else if (Math.abs(x - x1) != 2 || Math.abs(y - y1) != 2) {
 				return false;
-			} else if (y < 6) {
+			} else if (y <5) {
 				return false;
 			}
 			int i = 0;
@@ -216,10 +216,13 @@ public class YHChessboard implements Chessboard {
 					x1 = x;
 					x = c;
 				} for (int i = x1 + 1; i < x; i++) {
-					return Map[i][y1] == null;
+					if(Map[i][y1]!=null){
+						return false;
+					}
 				}
 				x1=oldx1;
 				x=oldx;
+				return true;
 			}
 			if (y != y1) {
 				if (y1 > y) {
