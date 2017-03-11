@@ -295,7 +295,10 @@ public class YHChessboard implements Chessboard {
 			if (Math.abs(x - x1) > 1 || Math.abs(y - y1) > 1) {
 				return false;
 			}
-			return !(y >= 5 && (x - x1) != 0);
+			if(y-y1>0){
+				return false;
+			}
+			return !(y >= 5 && x != x1);
 		}
 		return false;
 	}
