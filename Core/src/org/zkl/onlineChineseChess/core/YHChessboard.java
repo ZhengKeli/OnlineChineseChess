@@ -206,28 +206,35 @@ public class YHChessboard implements Chessboard {
 			if ((x - x1) * (y - y1) != 0) {
 				return false;
 			}
+			int oldx1=x1;
+			int oldx=x;
+			int oldy1=y1;
+			int oldy=y;
 			if (x1 != x) {
 				if (x1 > x) {
 					int c = x1;
 					x1 = x;
 					x = c;
-				} else for (int i = x1 + 1; i < x; i++) {
-					if (Map[i][y1] != null) {
-						return false;
-					}
+				} for (int i = x1 + 1; i < x; i++) {
+					return Map[i][y1] == null;
 				}
+				x1=oldx1;
+				x=oldx;
 			}
 			if (y != y1) {
 				if (y1 > y) {
 					int t = y1;
 					y1 = y;
 					y = t;
-				} else for (int j = y1 + 1; j < y; j++) {
+				} for (int j = y1 + 1; j < y; j++) {
 					if (Map[x1][j] != null) {
 						return false;
 					}
 				}
-			} else return true;
+				y1=oldy1;
+				y=oldy;
+				return true;
+			}
 		} else if (oldChessType == ChessType.pao) {
 			if ((x - x1) * (y - y1) != 0) {
 				return false;
@@ -285,10 +292,7 @@ public class YHChessboard implements Chessboard {
 			if (Math.abs(x - x1) > 1 || Math.abs(y - y1) > 1) {
 				return false;
 			}
-			if (y >= 5 && (x - x1) != 0) {
-				return false;
-			}
-			return y - y1 <= 0;
+			return !(y >= 5 && (x - x1) != 0);
 		}
 		return false;
 	}
