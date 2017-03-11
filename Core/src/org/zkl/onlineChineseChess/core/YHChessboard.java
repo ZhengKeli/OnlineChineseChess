@@ -93,7 +93,7 @@ public class YHChessboard implements Chessboard {
 			} else {
 				actionPlayer = ChessPlayer.red;
 			}
-			if(Map[toColumn][toRow].getType()==ChessType.shuai){
+			if(Map[toColumn][toRow]!=null&&Map[toColumn][toRow].getType()==ChessType.shuai){
 				return new ActionResult(true,true);
 			}
 			else return new ActionResult(true,false);
