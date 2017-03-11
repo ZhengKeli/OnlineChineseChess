@@ -1,6 +1,5 @@
 package org.zkl.onlineChineseChess.web.servlet
 
-import org.zkl.onlineChineseChess.web.Configuration
 import org.zkl.onlineChineseChess.web.base.GameData
 import org.zkl.onlineChineseChess.web.base.GameState
 import org.zkl.onlineChineseChess.web.base.IllegalGameStateException
@@ -51,7 +50,7 @@ class ActionGameServlet : HttpServlet(){
 				}
 				
 				//顺便更新 token
-				val newGameToken = game.createToken(Configuration.launcherPlayType)
+				val newGameToken = game.createToken(gameToken.chessPlayer)
 				val tokenString = newGameToken.toTokenString()
 				respJSON.put(resp_gameToken, tokenString)
 				putTokenToCookie(resp, tokenString, newGameToken.expired)
