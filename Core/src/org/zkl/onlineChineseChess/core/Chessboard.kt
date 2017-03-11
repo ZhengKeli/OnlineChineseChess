@@ -2,6 +2,9 @@ package org.zkl.onlineChineseChess.core
 
 
 enum class ChessPlayer { red, black;
+	/**
+	 * 返回它的对手
+	 */
 	fun getOpposite(): ChessPlayer {
 		return when (this) {
 			red -> black
@@ -19,9 +22,17 @@ enum class ChessType{
 	/** 炮 */ pao
 }
 
+/**
+ * 棋子，包括其棋子类型和棋手信息
+ */
 data class Chess(val player: ChessPlayer, val type: ChessType)
+
+/**
+ * 下棋指令的反馈
+ */
 data class ActionResult
 @JvmOverloads constructor(val legal: Boolean=true,val won: Boolean=false)
+
 
 interface Chessboard {
 	
