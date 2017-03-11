@@ -218,9 +218,11 @@
         }
         else if (game.state == "finished") {
             if (game.winner == game.player) {
-                titleContent += "你赢了" + pick();
+                titleContent += "你赢了" + pick()+"!";
+                alert("你赢了！");
             } else {
-                titleContent += "你输了" + pick();
+                titleContent += "你输了啊哈哈哈哈！！";
+                alert("你输了啊哈哈哈哈SB！");
             }
         }else{
             warnExceptionAndQuit();
