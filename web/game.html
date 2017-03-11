@@ -101,13 +101,6 @@
     };
     var rowCount=10;
     var columnCount=9;
-    for (var row=0;row<rowCount;row++) {
-        var theRow = [];
-        for (var column=0;column<columnCount;column++) {
-            theRow.push(null);
-        }
-        game.chessboard.push(theRow);
-    }
     function updateGameLogic(remoteGame) {
         game.id = remoteGame.id;
         game.name = remoteGame.name;
@@ -116,6 +109,13 @@
         game.actionPlayer = remoteGame.actionPlayer;
         game.winner = remoteGame.winner;
 
+        for (var row=0;row<rowCount;row++) {
+            for (var column=0;column<columnCount;column++) {
+                game.chessboard[row][column]=null;
+            }
+            game.chessboard.push(theRow);
+        }
+        
         var remoteChessboard = remoteGame["chessboard"];
         for (var index in remoteChessboard) {
             var remoteChess = remoteChessboard[index];
@@ -190,7 +190,7 @@
 <script id="script_ui" type="text/javascript">
 	
     //topBar
-    function updateTopBar() {
+    function updateTopBarUI() {
         var text_subTitle = $("#text_subTitle")[0];
         var titleContent = "棋局@" + game.id + "：" + game.name;
 
@@ -263,7 +263,7 @@
             return rowCount - 1 - row;
         }
     }
-    function updateCanvas() {
+    function updateCanvasUI() {
         var graphics = canvas_chessboard.getContext("2d");
         updateDrawArgs();
 
@@ -290,7 +290,7 @@
     }
 
     var select=null;
-    var actionLock=true;
+    var actionLock=false;
     function getMouseRelative(element,pageX, pageY) {
         var bbox = element.getBoundingClientRect();
         return {
@@ -307,7 +307,7 @@
 
         function selectIt() {
             select = {row: row, column: column};
-            updateCanvas();
+            updateCanvasUI();
         }
         function actionIt() {
             if (!actionLock) return;
@@ -324,7 +324,6 @@
                 warnException();
                 actionLock = true;
             });
-            select = null;
         }
         
         if (game.player == game.actionPlayer) {
@@ -363,6 +362,7 @@
     
     //refreshing
     function startRefreshing() {
+        actionLock = true;
         setInterval(function () {
             refreshGame();
         },500);
@@ -370,8 +370,8 @@
     function refreshGame() {
         checkRefreshAjax(function (game) {
             updateGameLogic(game);
-            updateTopBar();
-            updateCanvas();
+            updateTopBarUI();
+            doWhenAllLoaded(updateCanvasUI);
         },function () {
             warnExceptionAndQuit();
         })
@@ -380,11 +380,11 @@
     checkRefreshAjax(
         function (game) {
             updateGameLogic(game);
-            updateTopBar();
+            updateTopBarUI();
             text_chessboard.innerHTML = "正在加载资源文件...";
             doWhenAllLoaded(function () {
                 text_chessboard.style.display = "none";
-                updateCanvas();
+                updateCanvasUI();
                 startRefreshing();
             });
         },
