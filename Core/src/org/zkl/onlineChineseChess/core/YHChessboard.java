@@ -99,13 +99,33 @@ public class YHChessboard implements Chessboard {
 				for (int row = 0; row < 10; row++) {
 					if (Map[column][row] != null && Map[column][row].getPlayer() == get(fromRow, fromColumn).getPlayer()) {
 						if (get(fromRow, fromColumn).getPlayer() == ChessPlayer.red) {
-							if (IsAbleToPut(column, row, 4, 0)) {
+							int blackShuaix=0;
+							int blackShuaiy=0;
+							for(int m=0;m<=9;m++){
+								for(int n=0;n<=8;n++){
+									if(Map[n][m].getType()==ChessType.shuai&&Map[n][m].getPlayer()==ChessPlayer.black){
+										blackShuaix=n;
+										blackShuaiy=m;
+									}
+								}
+							}
+							if (IsAbleToPut(column, row,blackShuaix , blackShuaiy)) {
 								Map[fromColumn][fromRow] = null;
 								Map[toColumn][toRow] = firstChess;
 								return new ActionResult(true, false);
 							}
 						} else if (get(fromRow, fromColumn).getPlayer() == ChessPlayer.black) {
-							if (IsAbleToPut(column, row, 4, 9)) {
+							int redShuaix=0;
+							int redShuaiy=0;
+							for(int m=0;m<=9;m++){
+								for(int n=0;n<=8;n++){
+									if(Map[n][m]!=null&&Map[n][m].getType()==ChessType.shuai&&Map[n][m].getPlayer()==ChessPlayer.red){
+										redShuaix=n;
+										redShuaiy=m;
+									}
+								}
+							}
+							if (IsAbleToPut(column, row, redShuaix, redShuaiy)) {
 								Map[fromColumn][fromRow] = null;
 								Map[toColumn][toRow] = firstChess;
 								return new ActionResult(true, false);
@@ -113,13 +133,33 @@ public class YHChessboard implements Chessboard {
 						}
 					} else if (Map[column][row] != null && Map[column][row].getPlayer() != get(fromRow, fromColumn).getPlayer()) {
 						if (get(fromRow, fromColumn).getPlayer() == ChessPlayer.black) {
-							if (IsAbleToPut(column, row, 4, 0)) {
+							int blackShuaix=0;
+							int blackShuaiy=0;
+							for(int m=0;m<=9;m++){
+								for(int n=0;n<=8;n++){
+									if(Map[n][m].getType()==ChessType.shuai&&Map[n][m].getPlayer()==ChessPlayer.black){
+										blackShuaix=n;
+										blackShuaiy=m;
+									}
+								}
+							}
+							if (IsAbleToPut(column, row, blackShuaix, blackShuaiy)) {
 								Map[fromColumn][fromRow] = null;
 								Map[toColumn][toRow] = firstChess;
 								return new ActionResult(true, true);
 							}
 						} else if (get(fromRow, fromColumn).getPlayer() == ChessPlayer.red) {
-							if (IsAbleToPut(column, row, 4, 9)) {
+							int redShuaix=0;
+							int redShuaiy=0;
+							for(int m=0;m<=9;m++){
+								for(int n=0;n<=8;n++){
+									if(Map[n][m].getType()==ChessType.shuai&&Map[n][m].getPlayer()==ChessPlayer.black){
+										redShuaix=n;
+										redShuaiy=m;
+									}
+								}
+							}
+							if (IsAbleToPut(column, row, redShuaix, redShuaiy)) {
 								Map[fromColumn][fromRow] = null;
 								Map[toColumn][toRow] = firstChess;
 								return new ActionResult(true, true);
@@ -144,36 +184,76 @@ public class YHChessboard implements Chessboard {
 				return false;
 			} else if (Math.abs(x - x1) > 1 || Math.abs(y - y1) > 1) {
 				return false;
-			} else if (x < 4 || x > 6 || (y > 3 && y < 8)) {
-				return false;
 			}
-			for(int row=0;row<=9;row++){
-				if(Map[x][row].getType()==ChessType.shuai){
-					int c=0;
-					for(int n=y+1;n<row;n++){
-						if(Map[x][n]!=null){
-							c++;
+			if(Map[x1][y1].getPlayer()==ChessPlayer.red){
+				if(x<3||x>5||y<7){
+					return false;
+				}
+				int c=0;
+				for(int t=0;t<y;t++){
+					if(Map[x][t].getType()==ChessType.shuai){
+						for(int k=t+1;k<y;k++){
+							if(Map[x][k]!=null){
+								c++;
+							}
 						}
-					}
-					if(c==0){
-						return false;
+						if(c==0){
+							return false;
+						}
 					}
 				}
 			}
+			if(Map[x1][y1].getPlayer()==ChessPlayer.black){
+				if(x<3||x>5||y>2){
+					return false;
+				}
+				int c=0;
+				for(int t=y+1;t<=9;t++){
+					if(Map[x][t]!=null&&Map[x][t].getType()==ChessType.shuai){
+						for(int k=y+1;k<t;k++){
+							if(Map[x][k]!=null){
+								c++;
+							}
+						}
+						if(c==0){
+							return false;
+						}
+					}
+				}
+			}
+			
 			return true;
 		} else if (oldChessType == ChessType.shi) {
 			if ((x - x1) * (y - y1) == 0) {
 				return false;
 			} else if (Math.abs(x - x1) > 1 || Math.abs(y - y1) > 1) {
 				return false;
-			} else return !(x < 4 || x > 6 || (y > 3 && y < 8));
+			}
+			if(Map[x1][y1].getPlayer()==ChessPlayer.red){
+				if(y<7||x<3||x>5){
+					return false;
+				}
+			}
+			if(Map[x1][y1].getPlayer()==ChessPlayer.black){
+				if(x<3||x>5||y>2){
+					return false;
+				}
+			}
+			return true;
 		} else if (oldChessType == ChessType.xiang) {
 			if ((x - x1) * (y - y1) == 0) {
 				return false;
 			} else if (Math.abs(x - x1) != 2 || Math.abs(y - y1) != 2) {
 				return false;
-			} else if (y <5) {
-				return false;
+			} if(Map[x1][y1].getPlayer()==ChessPlayer.red){
+				if(y<=4){
+					return false;
+				}
+			}
+			if(Map[x1][y1].getPlayer()==ChessPlayer.black){
+				if(y>4){
+					return false;
+				}
 			}
 			int i = 0;
 			int j = 0;
@@ -308,10 +388,24 @@ public class YHChessboard implements Chessboard {
 			if (Math.abs(x - x1) > 1 || Math.abs(y - y1) > 1) {
 				return false;
 			}
-			if(y-y1>0){
-				return false;
+			if(Map[x1][y1].getPlayer()==ChessPlayer.red) {
+				if (y - y1 > 0) {
+					return false;
+				}
+				if(y>=5&&x!=x1){
+					return false;
+				}
 			}
-			return !(y >= 5 && x != x1);
+			if(Map[x1][y1].getPlayer()==ChessPlayer.black){
+				if(y-y1<0){
+					return false;
+				}
+				if(y<=4&&x!=x1){
+					return false;
+				}
+			}
+			
+			return true;
 		}
 		return false;
 	}
