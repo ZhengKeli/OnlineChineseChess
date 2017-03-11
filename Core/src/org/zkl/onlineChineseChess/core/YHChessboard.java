@@ -105,247 +105,245 @@ public class YHChessboard implements Chessboard {
 	}
 	
 	public boolean IsAbleToPut(int x1, int y1, int x, int y) {
-		if (Map[x1][y1] != null) {
-			ChessType oldChessType = Map[x1][y1].getType();
-			if (Map[x][y] != null) {
-				ChessType newChessType = Map[x][y].getType();
-				if (newChessType == oldChessType) {
-					return false;
-				}
+		Chess fromChess = Map[x1][y1];
+		if (fromChess == null) return false;
+		ChessType oldChessType = fromChess.getType();
+		if (Map[x][y] != null) {
+			if (Map[x][y].getType() == oldChessType) {
+				return false;
 			}
-			if (oldChessType == ChessType.shuai) {
-				if ((x - x1) * (y - y1) != 0) {
-					return false;
-				} else if (Math.abs(x - x1) > 1 || Math.abs(y - y1) > 1) {
-					return false;
-				}
-				if (Map[x1][y1].getPlayer() == ChessPlayer.red) {
-					if (x < 3 || x > 5 || y < 7) {
-						return false;
-					}
-					int c = 0;
-					for (int t = 0; t < y; t++) {
-						if (Map[x][t].getType() == ChessType.shuai) {
-							for (int k = t + 1; k < y; k++) {
-								if (Map[x][k] != null) {
-									c++;
-								}
-							}
-							if (c == 0) {
-								return false;
-							}
-						}
-					}
-				}
-				if (Map[x1][y1].getPlayer() == ChessPlayer.black) {
-					if (x < 3 || x > 5 || y > 2) {
-						return false;
-					}
-					int c = 0;
-					for (int t = y + 1; t <= 9; t++) {
-						if (Map[x][t] != null && Map[x][t].getType() == ChessType.shuai) {
-							for (int k = y + 1; k < t; k++) {
-								if (Map[x][k] != null) {
-									c++;
-								}
-							}
-							if (c == 0) {
-								return false;
-							}
-						}
-					}
-				}
-				
-				return true;
-			} else if (oldChessType == ChessType.shi) {
-				if ((x - x1) * (y - y1) == 0) {
-					return false;
-				} else if (Math.abs(x - x1) > 1 || Math.abs(y - y1) > 1) {
-					return false;
-				}
-				if (Map[x1][y1].getPlayer() == ChessPlayer.red) {
-					if (y < 7 || x < 3 || x > 5) {
-						return false;
-					}
-				}
-				if (Map[x1][y1].getPlayer() == ChessPlayer.black) {
-					if (x < 3 || x > 5 || y > 2) {
-						return false;
-					}
-				}
-				return true;
-			} else if (oldChessType == ChessType.xiang) {
-				if ((x - x1) * (y - y1) == 0) {
-					return false;
-				} else if (Math.abs(x - x1) != 2 || Math.abs(y - y1) != 2) {
-					return false;
-				}
-				if (Map[x1][y1].getPlayer() == ChessPlayer.red) {
-					if (y <= 4) {
-						return false;
-					}
-				}
-				if (Map[x1][y1].getPlayer() == ChessPlayer.black) {
-					if (y > 4) {
-						return false;
-					}
-				}
-				int i = 0;
-				int j = 0;
-				if (x - x1 == 2) {
-					i = x - 1;
-				}
-				if (x - x1 == -2) {
-					i = x + 1;
-				}
-				if (y - y1 == 2) {
-					j = y - 1;
-				}
-				if (y - y1 == -2) {
-					j = y + 1;
-				}
-				return Map[i][j] == null;
-			} else if (oldChessType == ChessType.ma) {
-				if (Math.abs(x - x1) * Math.abs(y - y1) != 2) {
-					return false;
-				}
-				if (x - x1 == 2) {
-					if (Map[x - 1][y1] != null) {
-						return false;
-					}
-				}
-				if (x - x1 == -2) {
-					if (Map[x + 1][y1] != null) {
-						return false;
-					}
-				}
-				if (y - y1 == 2) {
-					if (Map[x1][y - 1] != null) {
-						return false;
-					}
-				}
-				if (y - y1 == -2) {
-					if (Map[x1][y + 1] != null) {
-						return false;
-					}
-				}
-				return true;
-			} else if (oldChessType == ChessType.che) {
-				if ((x - x1) * (y - y1) != 0) {
-					return false;
-				}
-				int oldx1 = x1;
-				int oldx = x;
-				int oldy1 = y1;
-				int oldy = y;
-				if (x1 != x) {
-					if (x1 > x) {
-						int c = x1;
-						x1 = x;
-						x = c;
-					}
-					for (int i = x1 + 1; i < x; i++) {
-						if (Map[i][y1] != null) {
-							return false;
-						}
-					}
-					x1 = oldx1;
-					x = oldx;
-					return true;
-				}
-				if (y != y1) {
-					if (y1 > y) {
-						int t = y1;
-						y1 = y;
-						y = t;
-					}
-					for (int j = y1 + 1; j < y; j++) {
-						if (Map[x1][j] != null) {
-							return false;
-						}
-					}
-					y1 = oldy1;
-					y = oldy;
-					return true;
-				}
-			} else if (oldChessType == ChessType.pao) {
-				if ((x - x1) * (y - y1) != 0) {
+		}
+		if (oldChessType == ChessType.shuai) {
+			if ((x - x1) * (y - y1) != 0) {
+				return false;
+			} else if (Math.abs(x - x1) > 1 || Math.abs(y - y1) > 1) {
+				return false;
+			}
+			if (fromChess.getPlayer() == ChessPlayer.red) {
+				if (x < 3 || x > 5 || y < 7) {
 					return false;
 				}
 				int c = 0;
-				int oldx1 = x1;
-				int oldx = x;
-				int oldy1 = y1;
-				int oldy = y;
-				if (x != x1) {
-					if (x1 > x) {
-						int t = x1;
-						x1 = x;
-						x = t;
-					}
-					for (int i = x1 + 1; i < x; i++) {
-						if (Map[i][y] != null) {
-							c++;
+				for (int t = 0; t < y; t++) {
+					if (Map[x][t]!=null && Map[x][t].getType() == ChessType.shuai) {
+						for (int k = t + 1; k < y; k++) {
+							if (Map[x][k] != null) {
+								c++;
+							}
+						}
+						if (c == 0) {
+							return false;
 						}
 					}
-					x1 = oldx1;
-					x = oldx;
 				}
-				if (y1 != y) {
-					if (y1 > y) {
-						int t = y1;
-						y1 = y;
-						y = t;
-					}
-					for (int j = y1 + 1; j < y; j++) {
-						if (Map[x][j] != null) {
-							c++;
+			}
+			if (fromChess.getPlayer() == ChessPlayer.black) {
+				if (x < 3 || x > 5 || y > 2) {
+					return false;
+				}
+				int c = 0;
+				for (int t = y + 1; t <= 9; t++) {
+					if (Map[x][t] != null && Map[x][t].getType() == ChessType.shuai) {
+						for (int k = y + 1; k < t; k++) {
+							if (Map[x][k] != null) {
+								c++;
+							}
+						}
+						if (c == 0) {
+							return false;
 						}
 					}
-					y = oldy;
-					y1 = oldy1;
 				}
-				if (c > 1) {
+			}
+			
+			return true;
+		} else if (oldChessType == ChessType.shi) {
+			if ((x - x1) * (y - y1) == 0) {
+				return false;
+			} else if (Math.abs(x - x1) > 1 || Math.abs(y - y1) > 1) {
+				return false;
+			}
+			if (fromChess.getPlayer() == ChessPlayer.red) {
+				if (y < 7 || x < 3 || x > 5) {
 					return false;
 				}
-				if (c == 0) {
-					if (Map[x][y] != null) {
-						return false;
-					}
-				}
-				if (c == 1) {
-					if (Map[x][y] == null) {
-						return false;
-					}
-				}
-				return true;
-			} else if (oldChessType == ChessType.bing) {
-				if ((x - x1) * (y - y1) != 0) {
+			}
+			if (fromChess.getPlayer() == ChessPlayer.black) {
+				if (x < 3 || x > 5 || y > 2) {
 					return false;
 				}
-				if (Math.abs(x - x1) > 1 || Math.abs(y - y1) > 1) {
+			}
+			return true;
+		} else if (oldChessType == ChessType.xiang) {
+			if ((x - x1) * (y - y1) == 0) {
+				return false;
+			} else if (Math.abs(x - x1) != 2 || Math.abs(y - y1) != 2) {
+				return false;
+			}
+			if (fromChess.getPlayer() == ChessPlayer.red) {
+				if (y <= 4) {
 					return false;
 				}
-				if (Map[x1][y1].getPlayer() == ChessPlayer.red) {
-					if (y - y1 > 0) {
-						return false;
-					}
-					if (y >= 5 && x != x1) {
+			}
+			if (fromChess.getPlayer() == ChessPlayer.black) {
+				if (y > 4) {
+					return false;
+				}
+			}
+			int i = 0;
+			int j = 0;
+			if (x - x1 == 2) {
+				i = x - 1;
+			}
+			if (x - x1 == -2) {
+				i = x + 1;
+			}
+			if (y - y1 == 2) {
+				j = y - 1;
+			}
+			if (y - y1 == -2) {
+				j = y + 1;
+			}
+			return Map[i][j] == null;
+		} else if (oldChessType == ChessType.ma) {
+			if (Math.abs(x - x1) * Math.abs(y - y1) != 2) {
+				return false;
+			}
+			if (x - x1 == 2) {
+				if (Map[x - 1][y1] != null) {
+					return false;
+				}
+			}
+			if (x - x1 == -2) {
+				if (Map[x + 1][y1] != null) {
+					return false;
+				}
+			}
+			if (y - y1 == 2) {
+				if (Map[x1][y - 1] != null) {
+					return false;
+				}
+			}
+			if (y - y1 == -2) {
+				if (Map[x1][y + 1] != null) {
+					return false;
+				}
+			}
+			return true;
+		} else if (oldChessType == ChessType.che) {
+			if ((x - x1) * (y - y1) != 0) {
+				return false;
+			}
+			int oldx1 = x1;
+			int oldx = x;
+			int oldy1 = y1;
+			int oldy = y;
+			if (x1 != x) {
+				if (x1 > x) {
+					int c = x1;
+					x1 = x;
+					x = c;
+				}
+				for (int i = x1 + 1; i < x; i++) {
+					if (Map[i][y1] != null) {
 						return false;
 					}
 				}
-				if (Map[x1][y1].getPlayer() == ChessPlayer.black) {
-					if (y - y1 < 0) {
-						return false;
-					}
-					if (y <= 4 && x != x1) {
-						return false;
-					}
-				}
-				
+				x1 = oldx1;
+				x = oldx;
 				return true;
 			}
-			return false;
+			if (y != y1) {
+				if (y1 > y) {
+					int t = y1;
+					y1 = y;
+					y = t;
+				}
+				for (int j = y1 + 1; j < y; j++) {
+					if (Map[x1][j] != null) {
+						return false;
+					}
+				}
+				y1 = oldy1;
+				y = oldy;
+				return true;
+			}
+		} else if (oldChessType == ChessType.pao) {
+			if ((x - x1) * (y - y1) != 0) {
+				return false;
+			}
+			int c = 0;
+			int oldx1 = x1;
+			int oldx = x;
+			int oldy1 = y1;
+			int oldy = y;
+			if (x != x1) {
+				if (x1 > x) {
+					int t = x1;
+					x1 = x;
+					x = t;
+				}
+				for (int i = x1 + 1; i < x; i++) {
+					if (Map[i][y] != null) {
+						c++;
+					}
+				}
+				x1 = oldx1;
+				x = oldx;
+			}
+			if (y1 != y) {
+				if (y1 > y) {
+					int t = y1;
+					y1 = y;
+					y = t;
+				}
+				for (int j = y1 + 1; j < y; j++) {
+					if (Map[x][j] != null) {
+						c++;
+					}
+				}
+				y = oldy;
+				y1 = oldy1;
+			}
+			if (c > 1) {
+				return false;
+			}
+			if (c == 0) {
+				if (Map[x][y] != null) {
+					return false;
+				}
+			}
+			if (c == 1) {
+				if (Map[x][y] == null) {
+					return false;
+				}
+			}
+			return true;
+		} else if (oldChessType == ChessType.bing) {
+			if ((x - x1) * (y - y1) != 0) {
+				return false;
+			}
+			if (Math.abs(x - x1) > 1 || Math.abs(y - y1) > 1) {
+				return false;
+			}
+			if (fromChess.getPlayer() == ChessPlayer.red) {
+				if (y - y1 > 0) {
+					return false;
+				}
+				if (y >= 5 && x != x1) {
+					return false;
+				}
+			}
+			if (fromChess.getPlayer() == ChessPlayer.black) {
+				if (y - y1 < 0) {
+					return false;
+				}
+				if (y <= 4 && x != x1) {
+					return false;
+				}
+			}
+			
+			return true;
 		}
 		return false;
 	}
