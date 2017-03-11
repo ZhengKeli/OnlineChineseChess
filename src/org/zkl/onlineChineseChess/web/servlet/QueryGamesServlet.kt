@@ -19,7 +19,7 @@ class QueryGamesServlet: HttpServlet(){
 	val resp_game_name = "name"
 	val resp_oldGameId = "oldGameId"
 	val resp_oldGameName = "oldGameName"
-	override fun doGet(req: HttpServletRequest, resp: HttpServletResponse) {
+	override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
 		serveWithCover(resp) {
 			val parameters = req.parameterMap
 			val respJSON = JSONObject()

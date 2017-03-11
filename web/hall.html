@@ -69,7 +69,7 @@
 <script id="script_ajax" type="text/javascript">
 
     function newGameAjax(newGameName,quitOldGame,onSucceed,onFailed) {
-        $.get({
+        $.post({
             url: "/api/newGame.jsp",
             data: {
                 name: newGameName,
@@ -103,7 +103,7 @@
     }
 
     function queryGamesAjax(onSucceed,onFailed) {
-        $.get({
+        $.post({
             url: "/api/queryGames.jsp",
             success: function (result) {
                 var retJSON = JSON.parse(result);
@@ -119,7 +119,7 @@
     }
 
     function joinGameAjax(gameId,quitOldGame,onSucceed,onFailed) {
-        $.get({
+        $.post({
             url: "/api/joinGame.jsp",
             data: {
                 gameId: gameId,

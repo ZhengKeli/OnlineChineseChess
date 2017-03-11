@@ -11,15 +11,14 @@
 			text-align: center;
 		}
 		.chessboardCanvas {
-			width: 80vw;
-			height: 80vw;
+			width: 70vmin;
+			height: 70vmin;
 		}
 	</style>
 </head>
 <body>
 <div id="div_mainBody" class="mainBody">
 	<div id="div_head" class="head">
-		<div class="title"> 棋局</div>
 		<div id="text_subTitle" class="subTitle"> 正在读取棋局信息...</div>
 	</div>
 	
@@ -39,11 +38,12 @@
 	//ajax
     var latestVersion = 0;
     function checkRefreshAjax(onNeedRefresh, onFailed) {
-        $.get({
+        $.post({
             url: "api/refreshGame.jsp",
             data: {latestVersion: latestVersion},
             success: function (result) {
                 var retJSON = JSON.parse(result);
+               // alert(JSON.stringify(retJSON));
                 if (!retJSON || retJSON["exception"]) {
                     onFailed(retJSON["exception"], retJSON["message"]);
                 } else if (retJSON["needRefresh"]) {
@@ -373,7 +373,7 @@
     function startRefreshing() {
         setInterval(function () {
             refreshGame();
-        },500);
+        },5000);
     }
     function refreshGame() {
         checkRefreshAjax(function (game) {

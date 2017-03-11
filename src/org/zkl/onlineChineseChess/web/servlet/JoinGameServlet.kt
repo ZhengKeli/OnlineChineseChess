@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse
 class JoinGameServlet: HttpServlet(){
 	val req_gameId = "gameId"
 	val resp_ReenterWarn="reenterWarn"
-	override fun doGet(req: HttpServletRequest, resp: HttpServletResponse) {
+	override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
 		serveWithCover(resp) {
 			val parameters=req.parameterMap
 			val respJSON = JSONObject()

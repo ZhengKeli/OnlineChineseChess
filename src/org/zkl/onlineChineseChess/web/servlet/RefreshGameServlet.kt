@@ -30,7 +30,7 @@ class RefreshGameServlet : HttpServlet(){
 	val resp_chess_type = "type"
 	val resp_chess_player = "player"
 	
-	override fun doGet(req: HttpServletRequest, resp: HttpServletResponse) {
+	override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
 		serveWithCover(resp) {
 			//读取api参数
 			val parameters = req.parameterMap

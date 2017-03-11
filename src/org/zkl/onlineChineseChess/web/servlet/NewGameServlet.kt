@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse
 @WebServlet(name = "newGame",urlPatterns = arrayOf("/api/newGame.jsp"))
 class NewGameServlet: HttpServlet(){
 	val req_name = "name"
-	override fun doGet(req: HttpServletRequest, resp: HttpServletResponse) {
+	override fun doPost(req: HttpServletRequest, resp: HttpServletResponse) {
 		serveWithCover(resp) {
 			val parameters = req.parameterMap
 			val respJSON = JSONObject()
