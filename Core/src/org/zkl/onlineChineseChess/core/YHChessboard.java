@@ -114,22 +114,15 @@ public class YHChessboard implements Chessboard {
 				return false;
 			}
 		}
-		Map[x][y]=Map[x1][y1];
-		Map[x1][y1]=null;
+		
 		if (oldChessType == ChessType.shuai) {
 			if ((x - x1) * (y - y1) != 0) {
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
 				return false;
 			} else if (Math.abs(x - x1) > 1 || Math.abs(y - y1) > 1) {
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
 				return false;
 			}
 			if (fromChess.getPlayer() == ChessPlayer.red) {
 				if (x < 3 || x > 5 || y < 7) {
-					Map[x1][y1]=fromChess;
-					Map[x][y]=toChess;
 					return false;
 				}
 				int c = 0;
@@ -141,8 +134,6 @@ public class YHChessboard implements Chessboard {
 							}
 						}
 						if (c == 0) {
-							Map[x1][y1]=fromChess;
-							Map[x][y]=toChess;
 							return false;
 						}
 					}
@@ -150,8 +141,6 @@ public class YHChessboard implements Chessboard {
 			}
 			if (fromChess.getPlayer() == ChessPlayer.black) {
 				if (x < 3 || x > 5 || y > 2) {
-					Map[x1][y1]=fromChess;
-					Map[x][y]=toChess;
 					return false;
 				}
 				int c = 0;
@@ -163,64 +152,56 @@ public class YHChessboard implements Chessboard {
 							}
 						}
 						if (c == 0) {
-							Map[x1][y1]=fromChess;
-							Map[x][y]=toChess;
 							return false;
 						}
 					}
 				}
 			}
-			Map[x1][y1]=fromChess;
-			Map[x][y]=toChess;
 			return true;
 		} else if (oldChessType == ChessType.shi) {
+			Map[x1][y1]=null;
+			Map[x][y]=fromChess;
+			if(panduanDuiJiang()){
+				return false;
+			}
+			Map[x1][y1]=fromChess;
+			Map[x][y]=toChess;
 			if ((x - x1) * (y - y1) == 0) {
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
 				return false;
 			} else if (Math.abs(x - x1) > 1 || Math.abs(y - y1) > 1) {
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
 				return false;
 			}
 			if (fromChess.getPlayer() == ChessPlayer.red) {
 				if (y < 7 || x < 3 || x > 5) {
-					Map[x1][y1]=fromChess;
-					Map[x][y]=toChess;
 					return false;
 				}
 			}
 			if (fromChess.getPlayer() == ChessPlayer.black) {
 				if (x < 3 || x > 5 || y > 2) {
-					Map[x1][y1]=fromChess;
-					Map[x][y]=toChess;
 					return false;
 				}
 			}
-			Map[x1][y1]=fromChess;
-			Map[x][y]=toChess;
 			return !panduanDuiJiang();
 		} else if (oldChessType == ChessType.xiang) {
+			Map[x1][y1]=null;
+			Map[x][y]=fromChess;
+			if(panduanDuiJiang()){
+				return false;
+			}
+			Map[x1][y1]=fromChess;
+			Map[x][y]=toChess;
 			if ((x - x1) * (y - y1) == 0) {
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
 				return false;
 			} else if (Math.abs(x - x1) != 2 || Math.abs(y - y1) != 2) {
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
 				return false;
 			}
 			if (fromChess.getPlayer() == ChessPlayer.red) {
 				if (y <= 4) {
-					Map[x1][y1]=fromChess;
-					Map[x][y]=toChess;
 					return false;
 				}
 			}
 			if (fromChess.getPlayer() == ChessPlayer.black) {
 				if (y > 4) {
-					Map[x1][y1]=fromChess;
-					Map[x][y]=toChess;
 					return false;
 				}
 			}
@@ -239,54 +220,50 @@ public class YHChessboard implements Chessboard {
 				j = y + 1;
 			}
 			if(panduanDuiJiang()){
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
+				return false;
+			}
+			return Map[i][j] == null;
+		} else if (oldChessType == ChessType.ma) {
+			Map[x1][y1]=null;
+			Map[x][y]=fromChess;
+			if(panduanDuiJiang()){
 				return false;
 			}
 			Map[x1][y1]=fromChess;
 			Map[x][y]=toChess;
-			return Map[i][j] == null;
-		} else if (oldChessType == ChessType.ma) {
 			if (Math.abs(x - x1) * Math.abs(y - y1) != 2) {
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
 				return false;
 			}
 			if (x - x1 == 2) {
 				if (Map[x - 1][y1] != null) {
-					Map[x1][y1]=fromChess;
-					Map[x][y]=toChess;
 					return false;
 				}
 			}
 			if (x - x1 == -2) {
 				if (Map[x + 1][y1] != null) {
-					Map[x1][y1]=fromChess;
-					Map[x][y]=toChess;
 					return false;
 				}
 			}
 			if (y - y1 == 2) {
 				if (Map[x1][y - 1] != null) {
-					Map[x1][y1]=fromChess;
-					Map[x][y]=toChess;
 					return false;
 				}
 			}
 			if (y - y1 == -2) {
 				if (Map[x1][y + 1] != null) {
-					Map[x1][y1]=fromChess;
-					Map[x][y]=toChess;
 					return false;
 				}
 			}
-			Map[x1][y1]=fromChess;
-			Map[x][y]=toChess;
 			return !panduanDuiJiang();
 		} else if (oldChessType == ChessType.che) {
+			Map[x1][y1]=null;
+			Map[x][y]=fromChess;
+			if(panduanDuiJiang()){
+				return false;
+			}
+			Map[x1][y1]=fromChess;
+			Map[x][y]=toChess;
 			if ((x - x1) * (y - y1) != 0) {
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
 				return false;
 			}
 			int oldx1 = x1;
@@ -294,8 +271,6 @@ public class YHChessboard implements Chessboard {
 			int oldy1 = y1;
 			int oldy = y;
 			if(panduanDuiJiang()){
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
 				return false;
 			}
 			if (x1 != x) {
@@ -306,15 +281,11 @@ public class YHChessboard implements Chessboard {
 				}
 				for (int i = x1 + 1; i < x; i++) {
 					if (Map[i][y1] != null) {
-						Map[x1][y1]=fromChess;
-						Map[x][y]=toChess;
 						return false;
 					}
 				}
 				x1 = oldx1;
 				x = oldx;
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
 				return true;
 			}
 			if (y != y1) {
@@ -325,21 +296,22 @@ public class YHChessboard implements Chessboard {
 				}
 				for (int j = y1 + 1; j < y; j++) {
 					if (Map[x1][j] != null) {
-						Map[x1][y1]=fromChess;
-						Map[x][y]=toChess;
 						return false;
 					}
 				}
 				y1 = oldy1;
 				y = oldy;
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
 				return true;
 			}
 		} else if (oldChessType == ChessType.pao) {
+			Map[x1][y1]=null;
+			Map[x][y]=fromChess;
+			if(panduanDuiJiang()){
+				return false;
+			}
+			Map[x1][y1]=fromChess;
+			Map[x][y]=toChess;
 			if ((x - x1) * (y - y1) != 0) {
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
 				return false;
 			}
 			int c = 0;
@@ -348,8 +320,6 @@ public class YHChessboard implements Chessboard {
 			int oldy1 = y1;
 			int oldy = y;
 			if(panduanDuiJiang()){
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
 				return false;
 			}
 			if (x != x1) {
@@ -381,73 +351,54 @@ public class YHChessboard implements Chessboard {
 				y1 = oldy1;
 			}
 			if (c > 1) {
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
 				return false;
 			}
 			if (c == 0) {
 				if (Map[x][y] != null) {
-					Map[x1][y1]=fromChess;
-					Map[x][y]=toChess;
 					return false;
 				}
 			}
 			if (c == 1) {
 				if (Map[x][y] == null) {
-					Map[x1][y1]=fromChess;
-					Map[x][y]=toChess;
 					return false;
 				}
 			}
-			Map[x1][y1]=fromChess;
-			Map[x][y]=toChess;
 			return true;
 		} else if (oldChessType == ChessType.bing) {
+			Map[x1][y1]=null;
+			Map[x][y]=fromChess;
 			if(panduanDuiJiang()){
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
+				return false;
+			}
+			Map[x1][y1]=fromChess;
+			Map[x][y]=toChess;
+			if(panduanDuiJiang()){
 				return false;
 			}
 			if ((x - x1) * (y - y1) != 0) {
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
 				return false;
 			}
 			if (Math.abs(x - x1) > 1 || Math.abs(y - y1) > 1) {
-				Map[x1][y1]=fromChess;
-				Map[x][y]=toChess;
 				return false;
 			}
 			if (fromChess.getPlayer() == ChessPlayer.red) {
 				if (y - y1 > 0) {
-					Map[x1][y1]=fromChess;
-					Map[x][y]=toChess;
 					return false;
 				}
 				if (y >= 5 && x != x1) {
-					Map[x1][y1]=fromChess;
-					Map[x][y]=toChess;
 					return false;
 				}
 			}
 			if (fromChess.getPlayer() == ChessPlayer.black) {
 				if (y - y1 < 0) {
-					Map[x1][y1]=fromChess;
-					Map[x][y]=toChess;
 					return false;
 				}
 				if (y <= 4 && x != x1) {
-					Map[x1][y1]=fromChess;
-					Map[x][y]=toChess;
 					return false;
 				}
 			}
-			Map[x1][y1]=fromChess;
-			Map[x][y]=toChess;
 			return true;
 		}
-		Map[x1][y1]=fromChess;
-		Map[x][y]=toChess;
 		return false;
 	}
 	public int getShuaiX(ChessPlayer player){
@@ -485,7 +436,7 @@ public class YHChessboard implements Chessboard {
 				c++;
 			}
 		}
-		return c != 0;
+		return c == 0;
 	}
 	public boolean panduanDuiJiang(){
 		int redShuaiX=getShuaiX(ChessPlayer.red);
