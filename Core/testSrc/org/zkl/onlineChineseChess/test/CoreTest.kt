@@ -15,10 +15,11 @@ fun main(args:Array<String>){
 	
 	println(chessboard.action(9,4,8,4))
     println(chessboard.action(8,4,8,3))
-	println(chessboard.action(8,3,7,3))
-	println(chessboard.action(7,3,8,3))
-//	println(chessboard.action(0,7,2,6))
-//	println(chessboard.action(4,5,2,6))
+	println(chessboard.action(9,3,8,4))
+//	println(chessboard.action(8,4,7,3))
+	println(chessboard.action(0,3,1,4))
+	println(chessboard.action(0,4,0,3))
+//	println(chessboard.action(7,3,8,4))
 	
 	chessboard.printSelf()
 	
