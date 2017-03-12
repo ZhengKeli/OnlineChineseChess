@@ -162,6 +162,8 @@ public class YHChessboard implements Chessboard {
 			Map[x1][y1]=null;
 			Map[x][y]=fromChess;
 			if(panduanDuiJiang()){
+				Map[x1][y1]=fromChess;
+				Map[x][y]=toChess;
 				return false;
 			}
 			Map[x1][y1]=fromChess;
@@ -186,6 +188,8 @@ public class YHChessboard implements Chessboard {
 			Map[x1][y1]=null;
 			Map[x][y]=fromChess;
 			if(panduanDuiJiang()){
+				Map[x1][y1]=fromChess;
+				Map[x][y]=toChess;
 				return false;
 			}
 			Map[x1][y1]=fromChess;
@@ -227,6 +231,8 @@ public class YHChessboard implements Chessboard {
 			Map[x1][y1]=null;
 			Map[x][y]=fromChess;
 			if(panduanDuiJiang()){
+				Map[x1][y1]=fromChess;
+				Map[x][y]=toChess;
 				return false;
 			}
 			Map[x1][y1]=fromChess;
@@ -259,6 +265,8 @@ public class YHChessboard implements Chessboard {
 			Map[x1][y1]=null;
 			Map[x][y]=fromChess;
 			if(panduanDuiJiang()){
+				Map[x1][y1]=fromChess;
+				Map[x][y]=toChess;
 				return false;
 			}
 			Map[x1][y1]=fromChess;
@@ -307,6 +315,8 @@ public class YHChessboard implements Chessboard {
 			Map[x1][y1]=null;
 			Map[x][y]=fromChess;
 			if(panduanDuiJiang()){
+				Map[x1][y1]=fromChess;
+				Map[x][y]=toChess;
 				return false;
 			}
 			Map[x1][y1]=fromChess;
@@ -319,9 +329,6 @@ public class YHChessboard implements Chessboard {
 			int oldx = x;
 			int oldy1 = y1;
 			int oldy = y;
-			if(panduanDuiJiang()){
-				return false;
-			}
 			if (x != x1) {
 				if (x1 > x) {
 					int t = x1;
@@ -368,13 +375,12 @@ public class YHChessboard implements Chessboard {
 			Map[x1][y1]=null;
 			Map[x][y]=fromChess;
 			if(panduanDuiJiang()){
+				Map[x1][y1]=fromChess;
+				Map[x][y]=toChess;
 				return false;
 			}
 			Map[x1][y1]=fromChess;
 			Map[x][y]=toChess;
-			if(panduanDuiJiang()){
-				return false;
-			}
 			if ((x - x1) * (y - y1) != 0) {
 				return false;
 			}
