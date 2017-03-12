@@ -70,7 +70,7 @@
 
     function newGameAjax(newGameName,quitOldGame,onSucceed,onFailed) {
         $.post({
-            url: "/api/newGame.jsp",
+            url: "./api/newGame.jsp",
             data: {
                 name: newGameName,
                 quitOldGame: quitOldGame
@@ -104,7 +104,7 @@
 
     function queryGamesAjax(onSucceed,onFailed) {
         $.post({
-            url: "/api/queryGames.jsp",
+            url: "./api/queryGames.jsp",
             success: function (result) {
                 var retJSON = JSON.parse(result);
                 if (!retJSON) {
@@ -120,7 +120,7 @@
 
     function joinGameAjax(gameId,quitOldGame,onSucceed,onFailed) {
         $.post({
-            url: "/api/joinGame.jsp",
+            url: "./api/joinGame.jsp",
             data: {
                 gameId: gameId,
 	            quitOldGame: quitOldGame

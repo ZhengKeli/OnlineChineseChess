@@ -39,7 +39,7 @@
     var latestVersion = 0;
     function checkRefreshAjax(onNeedRefresh, onFailed) {
         $.post({
-            url: "api/refreshGame.jsp",
+            url: "./api/refreshGame.jsp",
             data: {latestVersion: latestVersion},
             success: function (result) {
                 var retJSON = JSON.parse(result);
@@ -56,7 +56,7 @@
     }
     function quitGameAjax(onSucceed,onFailed) {
         $.post({
-            url: "api/quitGame.jsp",
+            url: "./api/quitGame.jsp",
 	        success:function (result) {
                 var retJSON = JSON.parse(result);
                 if (!retJSON || retJSON["exception"]) {
@@ -69,7 +69,7 @@
     }
     function actionGameAjax(fromRow, fromColumn, toRow, toColumn, onSucceed, onFailed) {
         $.post({
-            url: "api/actionGame.jsp",
+            url: "./api/actionGame.jsp",
 	        data:{
                 fromRow:fromRow,
 		        fromColumn:fromColumn,
