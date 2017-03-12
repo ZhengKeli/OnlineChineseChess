@@ -173,7 +173,7 @@ public class YHChessboard implements Chessboard {
 					return false;
 				}
 			}
-			return true;
+			return !panduanDuiJiang();
 		} else if (oldChessType == ChessType.xiang) {
 			if ((x - x1) * (y - y1) == 0) {
 				return false;
@@ -204,6 +204,9 @@ public class YHChessboard implements Chessboard {
 			if (y - y1 == -2) {
 				j = y + 1;
 			}
+			if(panduanDuiJiang()){
+				return false;
+			}
 			return Map[i][j] == null;
 		} else if (oldChessType == ChessType.ma) {
 			if (Math.abs(x - x1) * Math.abs(y - y1) != 2) {
@@ -229,7 +232,7 @@ public class YHChessboard implements Chessboard {
 					return false;
 				}
 			}
-			return true;
+			return !panduanDuiJiang();
 		} else if (oldChessType == ChessType.che) {
 			if ((x - x1) * (y - y1) != 0) {
 				return false;
@@ -238,6 +241,9 @@ public class YHChessboard implements Chessboard {
 			int oldx = x;
 			int oldy1 = y1;
 			int oldy = y;
+			if(panduanDuiJiang()){
+				return false;
+			}
 			if (x1 != x) {
 				if (x1 > x) {
 					int c = x1;
@@ -277,6 +283,9 @@ public class YHChessboard implements Chessboard {
 			int oldx = x;
 			int oldy1 = y1;
 			int oldy = y;
+			if(panduanDuiJiang()){
+				return false;
+			}
 			if (x != x1) {
 				if (x1 > x) {
 					int t = x1;
@@ -320,6 +329,9 @@ public class YHChessboard implements Chessboard {
 			}
 			return true;
 		} else if (oldChessType == ChessType.bing) {
+			if(panduanDuiJiang()){
+				return false;
+			}
 			if ((x - x1) * (y - y1) != 0) {
 				return false;
 			}
@@ -347,7 +359,50 @@ public class YHChessboard implements Chessboard {
 		}
 		return false;
 	}
-	
+	public int getShuaiX(ChessPlayer player){
+		for(int x=0;x<=8;x++){
+			for(int y=0;y<=9;y++){
+				if(Map[x][y]!=null&&Map[x][y].getType()==ChessType.shuai&&Map[x][y].getPlayer()==player){
+					return x;
+				}
+			}
+		}
+		return -1;
+	}
+	public int getShuaiY(ChessPlayer player){
+		for(int x=0;x<=8;x++){
+			for(int y=0;y<=9;y++){
+				if(Map[x][y]!=null&&Map[x][y].getPlayer()==player&&Map[x][y].getType()==ChessType.shuai){
+					return y;
+				}
+			}
+		}
+		return -1;
+	}
+	public boolean judgeIsFaceToFace(int redShuaiX,int redShuaiY,int blackShuaiX,int blackShuaiY){
+		if(redShuaiX!=blackShuaiX){
+			return false;
+		}
+		if(redShuaiY>blackShuaiY){
+			int t=redShuaiY;
+			redShuaiY=blackShuaiY;
+			blackShuaiY=t;
+		}
+		int c=0;
+		for(int row=redShuaiY+1;row<blackShuaiY;row++){
+			if(Map[redShuaiX][row]!=null){
+				c++;
+			}
+		}
+		return c == 0;
+	}
+	public boolean panduanDuiJiang(){
+		int redShuaiX=getShuaiX(ChessPlayer.red);
+		int redShuaiY=getShuaiY(ChessPlayer.red);
+		int blackShuaiX=getShuaiX(ChessPlayer.black);
+		int blackShuaiY=getShuaiY(ChessPlayer.black);
+		return judgeIsFaceToFace(redShuaiX,redShuaiY,blackShuaiX,blackShuaiY);
+	}
 }
 	
 	
