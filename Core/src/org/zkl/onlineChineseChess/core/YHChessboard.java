@@ -124,7 +124,7 @@ public class YHChessboard implements Chessboard {
 					return false;
 				}
 				int c = 0;
-				for (int t = 0; t < y; t++) {
+				for (int t = 0; t < y-1; t++) {
 					if (Map[x][t]!=null && Map[x][t].getType() == ChessType.shuai) {
 						for (int k = t + 1; k < y; k++) {
 							if (Map[x][k] != null) {
@@ -142,7 +142,7 @@ public class YHChessboard implements Chessboard {
 					return false;
 				}
 				int c = 0;
-				for (int t = y + 1; t <= 9; t++) {
+				for (int t = y + 2; t <= 9; t++) {
 					if (Map[x][t] != null && Map[x][t].getType() == ChessType.shuai) {
 						for (int k = y + 1; k < t; k++) {
 							if (Map[x][k] != null) {
