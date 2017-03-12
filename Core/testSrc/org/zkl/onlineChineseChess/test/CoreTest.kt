@@ -13,9 +13,12 @@ fun main(args:Array<String>){
 	//如下可以将棋盘输出到控制栏
 	chessboard.printSelf()
 	
-	println(chessboard.action(0,4,1,4))
-    println(chessboard.action(1,4,1,5))
-//	println(chessboard.action(5,2,7,0))
+	println(chessboard.action(6,2,5,2))
+    println(chessboard.action(9,1,7,2))
+	println(chessboard.action(7,2,5,3))
+	println(chessboard.action(5,3,4,5))
+	println(chessboard.action(0,7,2,6))
+	println(chessboard.action(4,5,2,6))
 	
 	chessboard.printSelf()
 	

@@ -109,7 +109,7 @@ public class YHChessboard implements Chessboard {
 		if (fromChess == null) return false;
 		ChessType oldChessType = fromChess.getType();
 		if (Map[x][y] != null) {
-			if (Map[x][y].getType() == oldChessType) {
+			if (Map[x][y].getPlayer() ==fromChess.getPlayer() ) {
 				return false;
 			}
 		}
