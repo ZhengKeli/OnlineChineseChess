@@ -20,11 +20,11 @@ body{
 
 /* head */
 .head{
-    margin-left: 20px;
+    margin-left: 10px;
 }
 .title {
-    font-size: 40px;
-    margin-top: 30px;
+    font-size: 30px;
+    margin-top: 10px;
 }
 .subTitle {
     font-size: 20px;
@@ -36,17 +36,17 @@ body{
 /*operation*/
 .operation {
     margin-top: 10px;
-    margin-left: 30px;
-    font-size: 20px;
+    margin-left: 10px;
+    font-size: 18px;
     overflow-y: scroll;
 }
 .operationItem {
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 .operationItemButton {
     color: #000000;
-    font-size: 15px;
+    font-size: 18px;
     margin-right: 10px;
 }
 
