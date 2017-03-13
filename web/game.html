@@ -11,8 +11,8 @@
 			text-align: center;
 		}
 		.chessboardCanvas {
-			width: 70vmin;
-			height: 70vmin;
+			width: 90vmin;
+			height: 90vmin;
 		}
 	</style>
 </head>
@@ -135,39 +135,9 @@
     
 </script>
 <script id="script_resources" type="text/javascript">
-    var resCount = 0;
-    var loadedCount = 0;
-    var allLoadedListeners = [];
-    function onOneLoaded() {
-        loadedCount++;
-        if (isAllLoaded()) {
-            onAllLoaded();
-        }
-    }
-    function onAllLoaded() {
-        for (var key in allLoadedListeners) {
-            if (typeof allLoadedListeners[key] == 'function'){
-                allLoadedListeners[key]();
-            }
-        }
-        allLoadedListeners = [];
-    }
-    function isAllLoaded() {
-        return loadedCount >= resCount;
-    }
-	function doWhenAllLoaded(action) {
-		if (isAllLoaded()) {
-            action();
-        }else{
-            allLoadedListeners.push(action);
-		}
-    }
-    
     function loadImage(src) {
         var img = new Image();
         img.src = src;
-        resCount++;
-        img.onload = onOneLoaded();
         return img
     }
     var img_chessboard = loadImage("res/chessboard.gif");
@@ -192,7 +162,7 @@
             pao: loadImage("res/chess/black_pao.gif")
         }
     };
-    
+
 </script>
 <script id="script_ui" type="text/javascript">
 	
@@ -277,24 +247,40 @@
         updateDrawArgs();
 
         //画棋盘
-        graphics.drawImage(img_chessboard, drawBoard.x, drawBoard.y, drawBoard.width, drawBoard.height);
+	    if (img_chessboard.complete) {
+            graphics.drawImage(img_chessboard, drawBoard.x, drawBoard.y, drawBoard.width, drawBoard.height);
+        }else{
+            img_chessboard.onload = updateCanvasUI;
+	    }
 
         //画棋子
         for (var row = 0; row < rowCount; row++) {
             for (var column = 0; column < columnCount; column++) {
-                var chess = game.chessboard[row][column];
-                if (!chess) continue;
-                const img_chess = imgMap_chess[chess.player][chess.type];
-                graphics.drawImage(img_chess,
-                    drawBoard.x + padding.x + interval.x * column - img_chess.width / 2,
-                    drawBoard.y + padding.y + interval.y * getLocatedRow(row) - img_chess.height / 2);
+                var thisChess = game.chessboard[row][column];
+                if (!thisChess) continue;
+                var img_chess = imgMap_chess[thisChess.player][thisChess.type];
+                if (!img_chess) continue;
+                var thisColumn=column;
+                var thisRow=getLocatedRow(row);
+                //由于javascript对循环没有局部变量，所以要用function包起来
+	            if(img_chess.complete) {
+                    graphics.drawImage(img_chess,
+	                    drawBoard.x + padding.x + interval.x * thisColumn-img_chess.width/2,
+                        drawBoard.y + padding.y + interval.y * thisRow-img_chess.height/2);
+                }else{
+                    img_chess.onload = updateCanvasUI;
+	            }
             }
         }
         
         if (select) {
-	        graphics.drawImage(img_selected,
-                drawBoard.x + padding.x + interval.x * select.column - img_selected.width / 2,
-                drawBoard.y + padding.y + interval.y * getLocatedRow(select.row) - img_selected.height / 2);
+	        if (img_selected.complete) {
+                graphics.drawImage(img_selected,
+                    drawBoard.x + padding.x + interval.x * select.column - img_selected.width / 2,
+                    drawBoard.y + padding.y + interval.y * getLocatedRow(select.row) - img_selected.height / 2);
+            }else{
+	            img_selected.onload=updateCanvasUI;
+	        }
         }
     }
 
@@ -379,9 +365,7 @@
         checkRefreshAjax(function (game) {
             updateGameLogic(game);
             updateTopBarUI();
-            doWhenAllLoaded(function () {
-                updateCanvasUI();
-            });
+	        updateCanvasUI();
         },function () {
             warnExceptionAndQuit();
         })
@@ -411,13 +395,10 @@
     function initializeUI(game) {
         updateGameLogic(game);
         updateTopBarUI();
-        text_chessboard.innerHTML = "正在加载资源文件...";
-        doWhenAllLoaded(function () {
-            text_chessboard.style.display = "none";
-            canvas_chessboard.onclick = onclickCanvas;
-            updateCanvasUI();
-            startRefreshing();
-        });
+        text_chessboard.style.display = "none";
+        canvas_chessboard.onclick = onclickCanvas;
+        updateCanvasUI();
+        startRefreshing();
     }
     checkRefreshAjax(initializeUI, warnVerifyFailedAndQuit);
 
