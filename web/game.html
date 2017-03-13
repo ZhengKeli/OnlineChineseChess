@@ -20,6 +20,7 @@
 <div id="div_mainBody" class="mainBody">
 	<div id="div_head" class="head">
 		<div id="text_subTitle" class="subTitle"> 正在读取棋局信息...</div>
+		<input id="b_quit" type="button" value="退出" style="display: none">
 	</div>
 	
 	<hr size="5px" color="#FFFFFF"/>
@@ -167,10 +168,17 @@
 <script id="script_ui" type="text/javascript">
 	
     //topBar
+    var text_subTitle = $("#text_subTitle")[0];
+    var b_quit = $("#b_quit")[0];
     function updateTopBarUI() {
-        var text_subTitle = $("#text_subTitle")[0];
+        b_quit.style.display = "inline";
+        if (game.state=="playing"){
+            b_quit.value = "认输";
+        }else{
+            b_quit.value = "退出";
+        }
+        
         var titleContent = "棋局@" + game.id + "：" + game.name;
-
         titleContent += "<br/>[";
         var sub=["哦","哟","哈","咯","啦"];
         function pick() {
@@ -202,6 +210,20 @@
 
         text_subTitle.innerHTML = titleContent;
     }
+    function onQuitClicked() {
+	    if (game.state=="playing"){
+            if(confirm("您确定要认输吗？")){
+                quitGameAjax(jumpToHall, warnExceptionAndQuit());
+            }
+	    }else if (game.state =="infant"){
+            if(confirm("您确定要退出吗？")){
+                quitGameAjax(jumpToHall, warnExceptionAndQuit());
+            }
+        }else{
+            quitGameAjax(jumpToHall, warnExceptionAndQuit());
+        }
+    }
+    b_quit.onclick = onQuitClicked;
     
     //chessboard
     var text_chessboard = $("#text_chessboard")[0];
