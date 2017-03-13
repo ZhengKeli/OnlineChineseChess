@@ -41,8 +41,8 @@ body{
     overflow-y: scroll;
 }
 .operationItem {
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 .operationItemButton {
     color: #000000;
