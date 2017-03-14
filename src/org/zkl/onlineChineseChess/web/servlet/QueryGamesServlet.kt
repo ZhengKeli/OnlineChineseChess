@@ -52,7 +52,7 @@ class QueryGamesServlet: HttpServlet(){
 			val token= readTokenOrNull(req)
 			if (token != null) {
 				val game = GameData.getGameOrNull(token.gameId)
-				if (game != null) {
+				if (game != null && game.state!=GameState.finished) {
 					respJSON.put(resp_oldGameId, game.id)
 					respJSON.put(resp_oldGameName, game.name)
 				}

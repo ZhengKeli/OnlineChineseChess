@@ -61,6 +61,7 @@
 	        success:function (result) {
                 var retJSON = JSON.parse(result);
                 if (!retJSON || retJSON["exception"]) {
+                    alert(JSON.stringify(retJSON));
                     onFailed(retJSON["exception"], retJSON["message"]);
                 } else if (retJSON["succeed"]) {
                     onSucceed();
@@ -172,10 +173,12 @@
     var b_quit = $("#b_quit")[0];
     function updateTopBarUI() {
         b_quit.style.display = "inline";
-        if (game.state=="playing"){
+        if (game.state == "infant") {
+            b_quit.value = "取消棋局";
+        } else if (game.state == "playing") {
             b_quit.value = "认输";
-        }else{
-            b_quit.value = "退出";
+        }else if (game.state=="finished"){
+            b_quit.value = "回到大厅";
         }
         
         var titleContent = "棋局@" + game.id + "：" + game.name;
@@ -211,16 +214,16 @@
         text_subTitle.innerHTML = titleContent;
     }
     function onQuitClicked() {
-	    if (game.state=="playing"){
-            if(confirm("您确定要认输吗？")){
-                quitGameAjax(jumpToHall, warnExceptionAndQuit());
+        if (game.state == "infant") {
+            if (confirm("您确定要取消棋局吗？")) {
+                quitGameAjax(jumpToHall, warnExceptionAndQuit);
             }
-	    }else if (game.state =="infant"){
-            if(confirm("您确定要退出吗？")){
-                quitGameAjax(jumpToHall, warnExceptionAndQuit());
+        } else if (game.state == "playing") {
+            if (confirm("您确定要认输吗？")) {
+                quitGameAjax(jumpToHall, warnExceptionAndQuit);
             }
-        }else{
-            quitGameAjax(jumpToHall, warnExceptionAndQuit());
+        } else if (game.state == "finished") {
+            jumpToHall();
         }
     }
     b_quit.onclick = onQuitClicked;
